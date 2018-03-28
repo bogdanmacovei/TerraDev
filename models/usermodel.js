@@ -1,13 +1,6 @@
 var mongoose = require('mongoose');
 
 var userSchema = new mongoose.Schema({
-	general: {
-		firstName: String,
-		lastName: String,
-		email: String,
-		birthdate: String,
-		city: String
-	},
 	professional: {
 		education: {
 			actual: String,
@@ -43,6 +36,11 @@ var userSchema = new mongoose.Schema({
 			position: String
 		}]
 	},
+	firstName: String,
+	lastName: String,
+	email: String,
+	birthdate: String,
+	city: String,
 	linkProfilePicture: String,
 	username: String,
 	password: String,
