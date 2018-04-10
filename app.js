@@ -34,6 +34,9 @@ mongoose.connect('mongodb://localhost:27017/mydb')
 require ('./models/usermodel');
 var User = mongoose.model ('UserTerraDev');
 
+require ('./models/teammodel');
+var Team = mongoose.model ('TeamTerraDev');
+
 var Auth = require ('./modules/auth');
 var auth = new Auth(User);
 
@@ -46,16 +49,27 @@ routes (app, auth, __dirname);
 var userRest = require ('./modules/userrest');
 userRest (app, auth, mongoose);
 
+var teamRest = require ('./modules/teamrest');
+teamRest (app, auth, mongoose);
+
 app.use (function (req, res, next) {
 	if (res.status (404)) {
     	res.send("404");
   	}
 });
 
-User.find({})
-	.catch (err => {
-		console.log (err);
-	})
-	.then (result => {
-		console.log (result);
-	});
+// User.find({})
+// 	.catch (err => {
+// 		console.log (err);
+// 	})
+// 	.then (result => {
+// 		console.log (result);
+// 	});
+
+// Team.deleteOne({name: "dadada"})
+// 	.catch (err => console.log(err))
+// 	.then (() => console.log ('success'));
+
+// User.updateOne({username: 'bogdanmaco'}, {teamDetails: {roles: []}})
+// 	.catch (err => console.log (err))
+// 	.then (() => console.log ('success'));
