@@ -15,6 +15,16 @@
         <button ng-click = "log_out()"> Log out </button>
     </div>
 
+    <br>
+    <fieldset>
+        <legend>Create Team</legend>
+
+        <input type = "text" id = "teamname" placeholder = "Team name">
+        <br><br>
+        <button id = "createTeam"> Create! </button>
+
+    </fieldset>
+
     <script>
 
     var app = angular.module ('index', []);
@@ -48,6 +58,82 @@
             eraseCookie ('sesid');
             window.location.href = "";
         };
+    });
+
+
+    function createDate() {
+        var d = new Date();
+
+        var year = d.getFullYear() % 100;
+
+        var mon = d.getMonth() + 1;
+        if(mon < 10)
+            mon = '0' + mon;
+
+        var day = d.getDate();
+        if(day < 10)
+            day = '0' + day;
+
+        var hr = d.getHours();
+        if(hr < 10)
+            hr = '0' + hr;
+
+        var min = d.getMinutes();
+        if(min < 10)
+            min = '0' + min;
+
+        var sec = d.getSeconds();
+        if(sec < 10)
+            sec = '0' + sec;
+
+        var currentDate = year + ' ' + mon + ' ' + day + ' ' + hr + ' ' + min + ' ' + sec;
+
+        return currentDate;
+    }
+
+    
+    $('#createTeam').click (function () {
+        $.get('/findUserByUsername/' + document.cookie.split(' ')[1].split('=')[1], function (data) {
+            var objToMongoTeam = {
+                name: $('#teamname').val(),
+                teamLeadId: data[0]._id,
+                registerDate: createDate(),
+                departmentId: 1,
+                users: [{
+                    userId: data[0]._id,
+                    username: document.cookie.split(' ')[1].split('=')[1]
+                }]
+            };
+
+            $.post ('/createTeam', objToMongoTeam, function (date) {}, 'json');
+
+            $.get('/findTeamByName/' + $('#teamname').val(), function (dataTeam) {
+                var newTeamId = dataTeam[0]._id;
+
+                var arr = data[0].teamDetails.roles;
+                arr.push({
+                    idTeam: newTeamId,
+                    position: 'Team Leader'
+                });
+
+                var objToMongoUser = {
+                    find: {
+                        _id: data[0]._id
+                    },
+                    replace: {
+                        teamDetails: {
+                            roles: arr
+                        }
+                    }
+                };
+
+                $.post ('/updateUser', objToMongoUser, function (date) {}, 'json');
+
+                alert ('Team successful created');
+            });
+
+        });
+        
     });
 
     </script>
