@@ -24,7 +24,7 @@ module.exports = function(app, auth, mongoose) {
 				console.log(err);
 			})
 			.then(result =>{
-				res.send(result)''
+				res.send(result);
 			});
 	});
 
