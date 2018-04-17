@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Team page</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+</head>
+<body>
+
+	<h1>Team <blank id = "test"> </blank></h1>
+
+	<fieldset>
+		<legend>Add user</legend>
+		<input type = "text" id = "username" placeholder = "Username">
+		<br><br>
+		<button id = "add"> Add user </button>
+	</fieldset>
+
+	<h2>Registered users</h2>
+	<div class = "users">
+	</div>
+
+	<script>
+		var teamName = window.location.href.split('?')[1].split('=')[1];
+		$('#test').append (teamName);
+
+		$.get('/findTeamByName/' + teamName, function (data) {
+			var arrUsers = data[0].users;
+
+			for (let i = 0; i < arrUsers.length; ++i) {
+				$('.users').append(arrUsers[i].username + '<br>');
+			}
+		});
+
+		$('#add').click (function () {
+			var usernameLocal = $('#username').val();
+
+			$.get('/findUserByUsername/' + usernameLocal, function (dataUser) {
+				$.get('/findTeamByName/' + teamName, function (dataTeam) {
+					var arrUsers = dataTeam[0].users;
+					arrUsers.push({
+						userId: dataUser[0]._id,
+						username: usernameLocal
+					});
+
+					var objToMongoTeam = {
+						find: {
+							_id: dataTeam[0]._id
+						},
+						replace: {
+							users: arrUsers
+						}
+					};
+
+					$.post ('/updateTeam', objToMongoTeam, function (date) {}, 'json');
+
+					var teamInfo = dataUser[0].teamDetails.roles;
+					teamInfo.push({
+						idTeam: dataTeam[0]._id,
+						position: 'Member'
+					});
+
+					var objToMongoUser = {
+						find: {
+							_id: dataUser[0]._id
+						},
+						replace: {
+							teamDetails: {
+								roles: teamInfo
+							}
+						}
+					};
+
+					$.post ('/updateUser', objToMongoUser, function (data) {}, 'json');
+
+					alert ('User added successfully');
+					window.location.href = '/team.html?teamname=' + teamName;
+				});
+			});
+				
+		});
+
+	</script>
+</body>
+</html>

@@ -25,6 +25,11 @@
 
     </fieldset>
 
+    <h2>Your teams</h2>
+    <div class = "teams">
+        
+    </div>
+
     <script>
 
     var app = angular.module ('index', []);
@@ -64,7 +69,7 @@
     function createDate() {
         var d = new Date();
 
-        var year = d.getFullYear() % 100;
+        var year = d.getFullYear();
 
         var mon = d.getMonth() + 1;
         if(mon < 10)
@@ -86,7 +91,7 @@
         if(sec < 10)
             sec = '0' + sec;
 
-        var currentDate = year + ' ' + mon + ' ' + day + ' ' + hr + ' ' + min + ' ' + sec;
+        var currentDate = year + '/' + mon + '/' + day + ' ' + hr + ':' + min + ':' + sec;
 
         return currentDate;
     }
@@ -134,6 +139,15 @@
 
         });
         
+    });
+
+    $.get('/findUserByUsername/' + document.cookie.split(' ')[1].split('=')[1], function (dataUser) {
+        var arrTeams = dataUser[0].teamDetails.roles;
+        for (let i = 0; i < arrTeams.length; ++i) {
+            $.get('/findTeamById/' + arrTeams[i].idTeam, function (dataTeam) {
+                $('.teams').append ('<a href = "/team.html?team=' + dataTeam[0].name + '">' + dataTeam[0].name + '</a>' + '<br>');
+            });
+        }
     });
 
     </script>
