@@ -10,4 +10,8 @@ module.exports = function (app, auth, dirname) {
 	app.get ('/login', auth.isNotAuth, function (req, res) {
 		res.sendFile (dirname + '/views/login.html');
 	});
+
+	app.get('/team.html', auth.isAuth, function (req, res) {
+		res.sendFile (dirname + '/views/team.html');
+	});
 }
