@@ -5,13 +5,14 @@ module.exports = function(app, auth, mongoose) {
 	app.post('/createTeam', function(req, res){
 		var teamTemp = new Team(req.body);
 		teamTemp.save();
+		req.end();
 	});
 
 	app.get('/findAllTeams', function(req,res){
 		Team.find({})
 			.select('-users')
 			.catch (err => {
-				console.log (err);
+				console.log(err);
 			})
 			.then (result => {
 				res.send(result);
@@ -44,17 +45,17 @@ module.exports = function(app, auth, mongoose) {
 				console.log(err);
 			})
 			.then(() => {
-				console.log('Success updated Team');
+				console.log('Team updated successfully');
 			});
 	});
 
-	app.get('/deleteTeamById/: id', function(req, res){
+	app.get('/deleteTeamById/:id', function(req, res){
 		Team.deleteOne({'_id': req.params.id})
 			.catch(err => {
 				console.log(err);
 			})
 			.then(() => {
-				console.log ('Succes deleted Team');
+				console.log ('Team deleted successfully');
 			});
 	});
 };
