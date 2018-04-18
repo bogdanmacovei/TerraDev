@@ -7,7 +7,7 @@
 </head>
 <body ng-app = "index">
  	<!-- Bine ai venit, <b id = "username"> </b>! -->
-    <div ng-controller = "identification"> Welcome, <b>{{name}}</b>! </div>
+    <div ng-controller = "identification"> Welcome, <span id = "identificationName"></span>! </div>
 
     <br>
 
@@ -34,11 +34,9 @@
 
     var app = angular.module ('index', []);
 
-    app.controller ('identification', function ($scope, $http) {
-        $http.get ('/findUserByUsername/' + document.cookie.split(' ')[1].split('=')[1])
-            .then (res => {
-                $scope.name = res.data[0].firstName;
-            });
+    var userName = document.cookie.split(' ')[1].split('=')[1];
+    $.get('/findUserByUsername/' + userName, function (dataUser) {
+        $('#identificationName').append('<a href = "/profile.html?username=' + userName + '"><b>' + dataUser[0].firstName + '</b></a>');
     });
 
     app.controller ('logOut', function ($scope) {
@@ -147,7 +145,7 @@
         var arrTeams = dataUser[0].teamDetails.roles;
         for (let i = 0; i < arrTeams.length; ++i) {
             $.get('/findTeamById/' + arrTeams[i].idTeam, function (dataTeam) {
-                $('.teams').append ('<a href = "/team.html?team=' + dataTeam[0].name + '">' + dataTeam[0].name + '</a>' + '<br>');
+                $('.teams').append ('<a href = "/team.html?teamname=' + dataTeam[0].name + '">' + dataTeam[0].name + '</a>' + '<br>');
             });
         }
     });
