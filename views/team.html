@@ -19,15 +19,31 @@
 	<div class = "users">
 	</div>
 
+	<div class = "pending">
+	</div>
+
 	<script>
 		var teamName = window.location.href.split('?')[1].split('=')[1];
 		$('#test').append (teamName);
 
-		$.get('/findTeamByName/' + teamName, function (data) {
-			var arrUsers = data[0].users;
-
+		$.get('/findTeamByName/' + teamName, function (dataTeam) {
+			var arrUsers = dataTeam[0].users;
+			var currentUser = document.cookie.split(' ')[1].split('=')[1];
 			for (let i = 0; i < arrUsers.length; ++i) {
-				$('.users').append(arrUsers[i].username + '<br>');
+				if(arrUsers[i].position != 'Pending'){
+					$.get('/findUserByUsername/' + currentUser, function (dataUser) {
+						if(dataUser[0]._id == dataTeam[0].teamLeadId){
+							$('.users')
+								.append(arrUsers[i].username)
+								.append('<button id = "changeRole">Role</button>')
+								.append('<button id = "remove">Remove</button>')
+								.append('<br>');
+						}
+						else
+							$('.users')
+								.append(arrUsers[i].username + '<br>');
+					});
+				}
 			}
 		});
 
@@ -79,6 +95,107 @@
 			});
 				
 		});
+
+		var teamName = window.location.href.split('?')[1].split('=')[1];
+
+		$.get('/findTeamByName/' + teamName, function (dataTeam) {
+			var currentUser = document.cookie.split(' ')[1].split('=')[1];
+			$.get('/findUserByUsername/' + currentUser, function (dataUser) {
+				if(dataTeam[0].teamLeadId === dataUser[0]._id) {
+					$('.pending').append('<h2>Pending users</h2>');
+					for(let i = 0; i < dataTeam[0].users.length; i++) {
+						if(dataTeam[0].users[i].position === 'Pending') {
+							$('.pending')
+								.append(dataTeam[0].users[i].username)
+								.append('<button class = "accept" id = "' + dataTeam[0].users[i].userId + '">Yes</button>')
+								.append('<button class = "decline" id = "' + dataTeam[0].users[i].userId +'">No</button><br>');
+						}
+					}
+					$('.accept').click (function () {
+						var arrLocal = dataTeam[0].users;
+						for(let i = 0; i < arrLocal.length; ++i) {
+							if(arrLocal[i].userId === $(this).attr('id')) {
+								arrLocal[i].position = 'Member';
+								break;
+							}
+						}
+
+						var objToMongoTeam = {
+							find:{
+								_id: dataTeam[0]._id
+							},
+							replace:{
+								users: arrLocal
+							}
+						};
+
+						$.post('/updateTeam', objToMongoTeam, function (data) {}, 'json');
+
+						var userLocalId = $(this).attr('id');
+						$.get('/findUserById/' + userLocalId, function (dataUserTemp) {
+							var arrUserTemp = dataUserTemp[0].teamDetails.roles;
+							arrUserTemp.push({
+								idTeam: dataTeam[0]._id,
+								position: 'Member'
+							});
+
+							var objToMongoUser = {
+								find: {
+									_id: userLocalId
+								},
+								replace: {
+									teamDetails: {
+										roles: arrUserTemp
+									}
+								}
+							};
+
+							alert (JSON.stringify(objToMongoUser));
+
+							$.post('/updateUser', objToMongoUser, function (data) {}, 'json');
+
+							alert('User accepted');
+							window.location.href = '/team.html?teamname=' + dataTeam[0].name;
+						});
+
+						
+						//break;
+					});
+					$('.decline').click (function () {
+						var uid = $(this).attr('id');
+						var arrTeamTemp = dataTeam[0].users;
+						for(let i = 0; i < arrTeamTemp.length; ++i){
+							if(arrTeamTemp[i].userId === uid) {
+								for(j = i; j < arrTeamTemp[i].length - 1; ++j) {
+									arrTeamTemp[j] = arrTeamTemp[j + 1];
+								}
+								break;
+							}
+						}
+
+						arrTeamTemp.length --;
+
+						var objToMongoTeam = {
+							find: {
+								_id: dataTeam[0]._id
+							},
+							replace:{
+								users: arrTeamTemp
+							}
+						};
+
+						$.post('/updateTeam', objToMongoTeam, function (date) {}, 'json');
+
+						alert('User declined');
+
+						window.location.href = '/team.html?teamname=' + dataTeam[0].name;
+
+					});
+				}
+			});
+		});
+
+
 
 	</script>
 </body>
