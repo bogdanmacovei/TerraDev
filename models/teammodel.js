@@ -6,8 +6,9 @@ var teamSchema = new mongoose.Schema({
 	registerDate: String,
 	departmentId: String,
 	users: [{
-		userId: String,
-		username: String
+		userId:String,
+		username: String,
+		position: String
 	}]
 }, {collection: 'TeamTerraDev'});
 
