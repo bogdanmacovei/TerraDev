@@ -106,7 +106,8 @@
                 departmentId: 1,
                 users: [{
                     userId: data[0]._id,
-                    username: document.cookie.split(' ')[1].split('=')[1]
+                    username: document.cookie.split(' ')[1].split('=')[1],
+                    position: 'Team Leader'
                 }]
             };
 
@@ -135,6 +136,7 @@
                 $.post ('/updateUser', objToMongoUser, function (date) {}, 'json');
 
                 alert ('Team successful created');
+                window.location.href = '/';
             });
 
         });

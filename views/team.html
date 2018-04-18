@@ -39,7 +39,8 @@
 					var arrUsers = dataTeam[0].users;
 					arrUsers.push({
 						userId: dataUser[0]._id,
-						username: usernameLocal
+						username: usernameLocal,
+						position: 'Member'
 					});
 
 					var objToMongoTeam = {

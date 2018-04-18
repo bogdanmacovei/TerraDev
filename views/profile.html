@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Profile</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+</head>
+<body>
+
+<h1>Profil <blank id = "test"></blank></h1>
+
+<fieldset>
+	<legend>Cauta echipa</legend>
+	<input type = "text" id = "fieldSearch" placeholder = "Search Team Name">
+	<button id = "search"> Search </button>
+</fieldset>
+
+<div class = "echipe1">
+</div>
+
+<script>
+	var userName = window.location.href.split('?')[1].split('=')[1];
+	$('#test').append(userName);
+
+	
+	$('#search').click (function () {
+		var fieldSearch = $('#fieldSearch').val();
+
+		$.get('/findTeamByName/' + fieldSearch, function (dataTeam) {
+			if(dataTeam[0] === undefined) {
+				$('.echipe1').empty();
+				$('.echipe1').append ('Team does not exist');
+			}
+			else {
+				$.get('/findUserByUsername/' + userName, function(data) {
+					var userIdTemp = data[0]._id;
+
+					var find = false;
+					for (let i = 0; i < dataTeam[0].users.length; i++) {
+						if (dataTeam[0].users[i].userId == userIdTemp) {
+							find = true;
+						}
+					}
+
+					if (find) {
+						$('.echipe1').empty();
+						$('.echipe1').append('You are already a member');
+					}
+					else {
+						$('.echipe1').empty();
+						$('.echipe1').append('<button id = "apply">Request Acces </button>');
+
+						$('#apply').click (function () {
+							alert ('Activity Module ');
+						});
+					}
+				});
+			}
+		});
+	});
+
+</script>
+
+</body>
+</html>
