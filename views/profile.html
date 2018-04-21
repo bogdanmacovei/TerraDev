@@ -14,8 +14,10 @@
 	<button id = "search"> Search </button>
 </fieldset>
 
-<div class = "echipe1">
+<div class = "team">
 </div>
+
+<div class = "information"></div>
 
 <script>
 	var userName = window.location.href.split('?')[1].split('=')[1];
@@ -27,8 +29,8 @@
 
 		$.get('/findTeamByName/' + fieldSearch, function (dataTeam) {
 			if(dataTeam[0] === undefined) {
-				$('.echipe1').empty();
-				$('.echipe1').append ('Team does not exist');
+				$('.team').empty();
+				$('.team').append ('Team does not exist');
 			}
 			else {
 				$.get('/findUserByUsername/' + userName, function(data) {
@@ -42,37 +44,24 @@
 					}
 
 					if (find) {
-						$('.echipe1').empty();
-						$('.echipe1').append('You are already a member');
+						$('.team').empty();
+						$('.team').append('You are already a member');
 					}
 					else {
-						$('.echipe1').empty();
-						$('.echipe1').append('<button id = "apply">Request Access </button>');
+						$('.team').empty();
+						$('.team').append('<button id = "apply">Request Acces </button>');
 
 						$('#apply').click (function () {
-							var arrTemp =  dataTeam[0].users;
-							arrTemp.push({
-								userId: data[0]._id,
-								username: data[0].username,
-								position: 'Pending'
-							});
-							var objToMongoTeam = {
-								find: {
-									_id: dataTeam[0]._id
-								},
-								replace: {
-									users: arrTemp
-								}
-							};
-
-							$.post('/updateTeam', objToMongoTeam, function (date) {}, 'json');
-
-							alert ('Your request has been sent');
-							window.location.href = '/profile.html?username=' + data[0].username;
+							alert ('Activity Module ');
 						});
 					}
 				});
 			}
+		});
+
+
+		$.get('/findUserByUsername/' + userName, function(data) {
+			console.log(data[0]);
 		});
 	});
 
