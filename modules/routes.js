@@ -14,4 +14,8 @@ module.exports = function (app, auth, dirname) {
 	app.get('/team.html', auth.isAuth, function (req, res) {
 		res.sendFile (dirname + '/views/team.html');
 	});
+
+	app.get('/profile.html', auth.isAuth, function (req, res) {
+		res.sendFile (dirname + '/views/profile.html');
+	});
 }
