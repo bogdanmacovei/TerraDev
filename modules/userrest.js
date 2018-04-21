@@ -33,6 +33,10 @@ module.exports = function(app, auth, mongoose) {
 
 	app.get('/findUserByUsername/:userToFind', function(req, res){
 		User.find({username: req.params.userToFind})
+			.select('-password')
+			.select('-hasAccount')
+			.select('-isConfirmed')
+			.select('-sesstoken')
 			.catch(err =>{
 				console.log(err);
 			})
