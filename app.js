@@ -55,6 +55,9 @@ teamRest (app, auth, mongoose);
 var messageRest = require ('./modules/messagerest');
 messageRest (app, auth, mongoose);
 
+var messageReplyRest = require ('./modules/messagereplyrest');
+messageReplyRest (app, auth, mongoose);
+
 app.use (function (req, res, next) {
 	if (res.status (404)) {
     	res.send("404");
