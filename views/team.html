@@ -26,12 +26,9 @@
 		var teamName = window.location.href.split('?')[1].split('=')[1];
 		$('#test').append (teamName);
 		$.get('/findTeamByName/' + teamName, function (dataTeam) {
-
 			var arrUsers = dataTeam[0].users;
 			var currentUser = document.cookie.split(' ')[1].split('=')[1];
-
 			$.get('/findUserByUsername/' + currentUser, function (dataCurrentUser) {
-
 				var id = dataCurrentUser[0]._id;
 				for (let i = 0; i < arrUsers.length; ++i) {
 					if (arrUsers[i].position != 'Pending') {
@@ -43,19 +40,21 @@
 								.append('<button id = ' + arrUsers[i].userId + ' class = "remove">Remove</button>')
 								.append('<br>');
 						}
+						else{
+							$('.users')
+								.append(arrUsers[i].username)
+								.append('<br>');	
+						}
 					}
 				}
-
 				$('.changeRole').click(function () {
 			 		var id = $(this).attr('id');
 			 		var newPos = $('#' + id).val();
-
 			 		for(let i = 0; i < arrUsers.length; ++i) {
 			 			if(arrUsers[i].userId == id) {
 			 				arrUsers[i].position = newPos;
 			 			}
 			 		}
-
 			 		var objToMongoTeam = {
 			 			find: {
 			 				_id : dataTeam[0]._id
@@ -65,7 +64,6 @@
 			 			}
 			 		};
 			 		$.post ('/updateTeam', objToMongoTeam, function (date) {}, 'json');
-
 			 		$.get ('/findUserById/' + id, function (dataUser) {
 			 			var arr = dataUser[0].teamDetails.roles;
 			 			for(let i = 0; i < arr.length; ++i){
@@ -86,10 +84,8 @@
 			 			$.post ('/updateUser', objToMongoUser, function (data) {}, 'json');
 			 		});
 				});
-
 				$('.remove').click(function () {
 					var id = $(this).attr('id');
-
 					for(let i = 0; i < arrUsers.length; ++i) {
 						if(arrUsers[i].userId == id) {
 							for(let j = i; j < arrUsers.length; ++j)
@@ -106,7 +102,6 @@
 						}
 					};
 					$.post ('/updateTeam', objToMongoTeam, function (date) {}, 'json');
-
 					$.get ('/findUserById/' + id, function (dataUser) {
 			 			var arr = dataUser[0].teamDetails.roles;
 			 			for(let i = 0; i < arr.length; ++i){
@@ -133,14 +128,10 @@
 				});
 			});
 		});
-
 		$('#add').click (function () {
 			var usernameLocal = $('#username').val();
-
 			$.get('/findUserByUsername/' + usernameLocal, function (dataUser) {
-
 				$.get('/findTeamByName/' + teamName, function (dataTeam) {
-
 					var arrUsers = dataTeam[0].users;
 					arrUsers.push({
 						userId: dataUser[0]._id,
