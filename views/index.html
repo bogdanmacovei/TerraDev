@@ -12,7 +12,7 @@
     <br>
 
 	<div ng-controller = "logOut">
-        <button ng-click = "log_out()"> Log out </button>
+        <button id = "logout" ng-click = "log_out()"> Log out </button>
     </div>
 
     <br>
@@ -32,15 +32,12 @@
 
     <script>
 
-    var app = angular.module ('index', []);
-
     var userName = document.cookie.split(' ')[1].split('=')[1];
     $.get('/findUserByUsername/' + userName, function (dataUser) {
         $('#identificationName').append('<a href = "/profile.html?username=' + userName + '"><b>' + dataUser[0].firstName + '</b></a>');
     });
 
-    app.controller ('logOut', function ($scope) {
-        
+    $('#logout').click (function () {
         function createCookie (name, value, days) {
             if (days) {
                 var date = new Date();
@@ -56,13 +53,10 @@
             createCookie (name, "", -1);
         }
 
-        $scope.log_out = function () {
-            eraseCookie ('username');
-            eraseCookie ('sesid');
-            window.location.href = "";
-        };
+        eraseCookie ('username');
+        eraseCookie ('sesid');
+        location.reload();
     });
-
 
     function createDate() {
         var d = new Date();
