@@ -5,7 +5,7 @@ module.exports = function(app, auth, mongoose) {
 	app.post('/createTeam', function(req, res){
 		var teamTemp = new Team(req.body);
 		teamTemp.save();
-		req.end();
+		res.end();
 	});
 
 	app.get('/findAllTeams', function(req,res){
