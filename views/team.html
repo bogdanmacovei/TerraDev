@@ -23,29 +23,91 @@
 	</div>
 
 	<script>
+
 		var teamName = window.location.href.split('?')[1].split('=')[1];
 		$('#test').append (teamName);
 
 		$.get('/findTeamByName/' + teamName, function (dataTeam) {
 			var arrUsers = dataTeam[0].users;
 			var currentUser = document.cookie.split(' ')[1].split('=')[1];
-			for (let i = 0; i < arrUsers.length; ++i) {
-				if(arrUsers[i].position != 'Pending'){
-					$.get('/findUserByUsername/' + currentUser, function (dataUser) {
-						if(dataUser[0]._id == dataTeam[0].teamLeadId){
+
+			$.get('/findUserByUsername/' + currentUser, function (dataCurrentUser) {
+				var id = dataCurrentUser[0]._id;
+
+				for (let i = 0; i < arrUsers.length; ++i) {
+					if (arrUsers[i].position != 'Pending') {
+						if (id == dataTeam[0].teamLeadId) {
 							$('.users')
-								.append(arrUsers[i].username)
-								.append('<button id = "changeRole">Role</button>')
-								.append('<button id = "remove">Remove</button>')
+								.append (arrUsers[i].username)
+								.append ('<select class = "select" id = ' + arrUsers[i].userId + '> <option value = "Member">Member </option> <option value = "Front-End Developer">Front-End Developer </option> <option value = "Back-End Developer">Back-End Developer </option> <option value = "QA">QA</option> <option value = "BI Specialist">BI Specialist </option> <option value = "Database Specialist">Database Specialist </option> <option value = "Scrum Master">Scrum Master </option> <option value = "Product Owner">Product Owner</option> </select>')
+
+								.append('<button id = ' + arrUsers[i].userId + ' class = "changeRole">Role</button>')
+								.append('<button id = ' + arrUsers[i].userId + ' class = "remove">Remove</button>')
 								.append('<br>');
 						}
-						else
-							$('.users')
-								.append(arrUsers[i].username + '<br>');
-					});
+					}
 				}
-			}
+
+				$('.changeRole').click(function () {
+			 		var id = $(this).attr('id');
+			 		$('#' + id + 'd').show();
+			 		var newPos = $('#' + id).val();
+
+			 		for(let i = 0; i < arrUsers.length; ++i){
+			 			if(arrUsers[i].userId == id){
+			 				arrUsers[i].position = newPos;
+
+			 			}
+			 		}
+
+			 		var objToMongoTeam = {
+			 			find: {
+			 				_id : dataTeam[0]._id
+			 			},
+			 			replace: {
+			 				users: arrUsers
+			 			}
+			 		};
+
+			 		$.post ('/updateTeam', objToMongoTeam, function (date) {}, 'json');
+
+			 		$.get('/findUserById/' + id, function (dataUser) {
+			 			var arr = dataUser[0].teamDetails.roles;
+
+
+			 			for(let i = 0; i < arr.length; ++i){
+			 				if(arr[i].idTeam == dataTeam[0]._id) {
+			 					arr[i].position = newPos;
+
+			 				}
+
+			 			}
+
+			 			var objToMongoUser = {
+			 				find: {
+			 					_id: dataUser[0]._id
+			 				},
+			 				replace: {
+			 					teamDetails: {
+			 						roles: arr
+			 					}
+			 				}
+			 			};
+			 			$.post ('/updateUser', objToMongoUser, function (data) {}, 'json');
+
+			 		});
+
+				});
+
+
+				$('.remove').click(function () {
+					var id = $(this).attr('id');
+				})
+
+			});
+
 		});
+
 
 		$('#add').click (function () {
 			var usernameLocal = $('#username').val();
