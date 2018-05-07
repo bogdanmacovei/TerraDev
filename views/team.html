@@ -157,16 +157,16 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
         for (let i = 0; i < dataTask.length; ++i) {
           if (dataTask[i].isDone == false) {
             $('.unfinishedtasks')
-              .append ('<button style = "width: 50px;" class = "donetask" id = "' + dataTask[i]._id + '"><i class = "fa fa-check"></i></button> ')
-              .append ('<button style = "width: 50px;" class = "deletetask" id = "' + dataTask[i]._id + '"><i class = "fa fa-close"></i></button> ')
-              .append ('('+ dataTask[i].storyPoints +' sp) <b>' + dataTask[i].mainSubject + '</b>')
+              .append ('<button style = "width: 50px;" class = "donetask w3-button w3-theme" id = "' + dataTask[i]._id + '"><i class = "fa fa-check"></i></button> ')
+              .append ('<button style = "width: 50px;" class = "deletetask w3-button w3-theme" id = "' + dataTask[i]._id + '"><i class = "fa fa-close"></i></button> ')
+              .append ('('+ dataTask[i].storyPoints +' sp) ' + dataTask[i].mainSubject)
               .append (' - <i>' + dataTask[i].description + '</i>')
               .append ('<br><br>');
           }
 
           else {
             $('.donetasks')
-              .append ('('+ dataTask[i].storyPoints +' sp) <b>' + dataTask[i].mainSubject + '</b>')
+              .append ('('+ dataTask[i].storyPoints +' sp) ' + dataTask[i].mainSubject)
               .append (' - <i>' + dataTask[i].description + '</i>')
               .append ('<br><br>');
           }
@@ -315,11 +315,11 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
           if (arrUsers[i].position != 'Pending') {
             if (id == dataTeam[0].teamLeadId) {
               $('.users')
-                .append ('<b>' + arrUsers[i].username + '</b>')
-                .append (' (<i>' + (arrUsers[i].position==undefined?'Scrum Master':arrUsers[i].position) + '</i>) ')
+                .append (arrUsers[i].username)
+                .append (' (<i>' + (arrUsers[i].position==undefined?'Scrum Master':arrUsers[i].position) + '</i>)<br><br>')
                 .append ('<select  class = "select" id = ' + arrUsers[i].userId + '> <option value = "Member">Member </option> <option value = "Front-End Developer">Front-End Developer </option> <option value = "Back-End Developer">Back-End Developer </option> <option value = "QA">QA</option> <option value = "BI Specialist">BI Specialist </option> <option value = "Database Specialist">Database Specialist </option> <option value = "Scrum Master">Scrum Master </option> <option value = "Product Owner">Product Owner</option> </select>')
-                .append(' <button id = ' + arrUsers[i].userId + ' class = "changeRole">Change Role</button>')
-                .append('<button id = ' + arrUsers[i].userId + ' class = "remove">Remove</button>')
+                .append('<br><br><button id = ' + arrUsers[i].userId + ' class = "changeRole w3-theme w3-button">Change Role</button>')
+                .append(' <button id = ' + arrUsers[i].userId + ' class = "remove w3-theme w3-button">Remove</button>')
                 .append('<br><br>');
             }
             else {
