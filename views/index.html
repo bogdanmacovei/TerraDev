@@ -169,32 +169,32 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
     var userName = document.cookie.split(' ')[1].split('=')[1];
 
     $.get('/findUserByUsername/' + userName, function (dataUser) {
-      var arrTeams = dataUser[0].teamDetails.roles;
+        var arrTeams = dataUser[0].teamDetails.roles;
 
-      for (let i = 0; i < arrTeams.length; ++i) {
-        $.get ('/findActivitiesForCategoryId/' + arrTeams[i].idTeam, function (dataTask) {
-          $.get ('/findTeamById/' + arrTeams[i].idTeam, function (dataTeam) {
-             for (let j = 0; j < dataTask.length; ++j) {
-              if (dataTask[j].isDone == false) {
-                $('#tasks')
-                .append('<h6 class="w3-opacity">' + dataTeam[0].name + ' (' + dataTask[j].storyPoints + ' SP)</h6>')
-                .append(' <a href = "team.html?teamname=' + dataTeam[0].name + '" class="w3-button"><i class="fa fa-eye"></i></button>')
-                .append(dataTask[j].mainSubject)
-                .append('<hr class = "w3-clear">');
-              }
-             }
-          });
-        });
-      }
+        for (let i = 0; i < arrTeams.length; ++i) {
+            $.get ('/findActivitiesForCategoryId/' + arrTeams[i].idTeam, function (dataTask) {
+                $.get ('/findTeamById/' + arrTeams[i].idTeam, function (dataTeam) {
+                    for (let j = 0; j < dataTask.length; ++j) {
+                        if (dataTask[j].isDone == false) {
+                            $('#tasks')
+                            .append('<h6 class="w3-opacity">' + dataTeam[0].name + ' (' + dataTask[j].storyPoints + ' SP)</h6>')
+                            .append(' <a href = "team.html?teamname=' + dataTeam[0].name + '" class="w3-button"><i class="fa fa-eye"></i></button>')
+                            .append(dataTask[j].mainSubject)
+                            .append('<hr class = "w3-clear">');
+                        }
+                    }
+                });
+            });
+        }
     });
 
     $.get('findUserByUsername/' + userName, function (data) {
-      if (data[0].linkProfilePicture) {
-        $('.avatar').append('<p class="w3-center"><img src="' + data[0].linkProfilePicture + '" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
-      }
-      else {
-        $('.avatar').append('<p class="w3-center"><img src="http://clicknathan.com/wp-content/uploads/2013/07/avatar-2.jpg" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
-      }
+        if (data[0].linkProfilePicture) {
+            $('.avatar').append('<p class="w3-center"><img src="' + data[0].linkProfilePicture + '" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+        }
+        else {
+            $('.avatar').append('<p class="w3-center"><img src="http://clicknathan.com/wp-content/uploads/2013/07/avatar-2.jpg" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+        }
     });
 
     $('#gotoprofile').click (function () {

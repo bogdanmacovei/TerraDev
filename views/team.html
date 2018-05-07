@@ -153,66 +153,66 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
     <script>
 
     $.get('/findTeamByName/' + window.location.href.split('?')[1].split('=')[1], function (dataTeam) {
-      $.get('/findActivitiesForCategoryId/' + dataTeam[0]._id, function (dataTask) {
-        for (let i = 0; i < dataTask.length; ++i) {
-          if (dataTask[i].isDone == false) {
-            $('.unfinishedtasks')
-              .append ('<button style = "width: 50px;" class = "donetask w3-button w3-theme" id = "' + dataTask[i]._id + '"><i class = "fa fa-check"></i></button> ')
-              .append ('<button style = "width: 50px;" class = "deletetask w3-button w3-theme" id = "' + dataTask[i]._id + '"><i class = "fa fa-close"></i></button> ')
-              .append ('('+ dataTask[i].storyPoints +' sp) ' + dataTask[i].mainSubject)
-              .append (' - <i>' + dataTask[i].description + '</i>')
-              .append ('<br><br>');
-          }
+        $.get('/findActivitiesForCategoryId/' + dataTeam[0]._id, function (dataTask) {
+            for (let i = 0; i < dataTask.length; ++i) {
+                if (dataTask[i].isDone == false) {
+                    $('.unfinishedtasks')
+                        .append ('<button style = "width: 50px;" class = "donetask w3-button w3-theme" id = "' + dataTask[i]._id + '"><i class = "fa fa-check"></i></button> ')
+                        .append ('<button style = "width: 50px;" class = "deletetask w3-button w3-theme" id = "' + dataTask[i]._id + '"><i class = "fa fa-close"></i></button> ')
+                        .append ('('+ dataTask[i].storyPoints +' sp) ' + dataTask[i].mainSubject)
+                        .append (' - <i>' + dataTask[i].description + '</i>')
+                        .append ('<br><br>');
+                    }
 
-          else {
-            $('.donetasks')
-              .append ('('+ dataTask[i].storyPoints +' sp) ' + dataTask[i].mainSubject)
-              .append (' - <i>' + dataTask[i].description + '</i>')
-              .append ('<br><br>');
-          }
-        }
+                else {
+                    $('.donetasks')
+                        .append ('('+ dataTask[i].storyPoints +' sp) ' + dataTask[i].mainSubject)
+                        .append (' - <i>' + dataTask[i].description + '</i>')
+                        .append ('<br><br>');
+                }
+            }   
 
-        $('.donetask').click (function () {
-          var idTask = $(this).attr('id');
+            $('.donetask').click (function () {
+                var idTask = $(this).attr('id');
 
-          var objToMongoActivity = {
-            find: {
-              _id: idTask
-            }, 
-            replace: {
-              isDone: true
-            }
-          };
+                var objToMongoActivity = {
+                    find: {
+                        _id: idTask
+                    }, 
+                    replace: {
+                        isDone: true
+                    }
+                };
 
-          $.post ('/updateActivity', objToMongoActivity, function (date) {}, 'json');
+                $.post ('/updateActivity', objToMongoActivity, function (date) {}, 'json');
 
-          alert ('This task is done!');
-          location.reload();
-        });
+                alert ('This task is done!');
+                location.reload();
+            });
 
-        $('.deletetask').click (function () {
-          $.get ('/deleteActivityById/' + $(this).attr('id'), function (data) {});
+            $('.deletetask').click (function () {
+                $.get ('/deleteActivityById/' + $(this).attr('id'), function (data) {});
           
-          alert ('This task was successful deleted!');
-          location.reload();
+                alert ('This task was successful deleted!');
+                location.reload();
+            });
         });
-      });
     });
 
     $('#addtask').click (function () {
-      $.get('/findTeamByName/' + window.location.href.split('?')[1].split('=')[1], function (dataTeam) {
-        var objToMongoActivity = {
-          forCategory: 'team',
-          forCategoryId: dataTeam[0]._id,
-          mainSubject: $('#subject').val(),
-          description: $('#description').val(),
-          creationDate: createDate(),
-          storyPoints: $('#storypoints').val(),
-          isDone: false
-        };
+        $.get('/findTeamByName/' + window.location.href.split('?')[1].split('=')[1], function (dataTeam) {
+            var objToMongoActivity = {
+                forCategory: 'team',
+                forCategoryId: dataTeam[0]._id,
+                mainSubject: $('#subject').val(),
+                description: $('#description').val(),
+                creationDate: createDate(),
+                storyPoints: $('#storypoints').val(),
+                isDone: false
+            };
 
-        $.post('/createActivity', objToMongoActivity, function (date) {}, 'json');
-      });
+            $.post('/createActivity', objToMongoActivity, function (date) {}, 'json');
+        });
 
         alert ('This task was successful added!');
         location.reload();
@@ -222,17 +222,17 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
 
 
     $.get('/findUserByUsername/' + userName, function (data) {
-      if (data[0].linkProfilePicture) {
-        $('.avatar').append('<p class="w3-center"><img src="' + data[0].linkProfilePicture + '" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
-      }
-      else {
-        $('.avatar').append('<p class="w3-center"><img src="http://clicknathan.com/wp-content/uploads/2013/07/avatar-2.jpg" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
-      }
+        if (data[0].linkProfilePicture) {
+            $('.avatar').append('<p class="w3-center"><img src="' + data[0].linkProfilePicture + '" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+        }
+        else {
+            $('.avatar').append('<p class="w3-center"><img src="http://clicknathan.com/wp-content/uploads/2013/07/avatar-2.jpg" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+        }
     });
       
 
     if (userName === window.location.href.split('?')[1].split('&')[0].split('=')[1].toString()) {
-      $('#edit').show();
+        $('#edit').show();
     }
 
     $('#gotoprofile').click (function () {
