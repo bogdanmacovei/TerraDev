@@ -1,6 +1,6 @@
 module.exports = function(app, auth, mongoose){
 	var User = mongoose.model('UserTerraDev');
-	var Activty = mongoose.model('ActivityTerraDev');
+	var Activity = mongoose.model('ActivityTerraDev');
 	var Team = mongoose.model('TeamTerraDev');
 
 	app.post('/createActivity', function(req, res) {

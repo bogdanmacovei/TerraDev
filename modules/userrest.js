@@ -19,6 +19,7 @@ module.exports = function(app, auth, mongoose) {
 	app.post ('/createUser', function(req, res) {
 		var userTemp = new User (req.body);
 		userTemp.save();
+		res.end();
 	});
 
 	app.get('/findUserById/:idUser', function(req, res){

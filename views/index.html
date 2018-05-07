@@ -1,38 +1,206 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Demo</title>
+	<title>Index</title>
+    <meta charset="UTF-8">
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.17/angular.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
+</style>
 </head>
-<body ng-app = "index">
- 	<!-- Bine ai venit, <b id = "username"> </b>! -->
-    <div ng-controller = "identification"> Welcome, <span id = "identificationName"></span>! </div>
 
-    <br>
 
-	<div ng-controller = "logOut">
-        <button id = "logout" ng-click = "log_out()"> Log out </button>
-    </div>
+<body class="w3-theme-l5">
 
-    <br>
-    <fieldset>
-        <legend>Create Team</legend>
+<!-- Navbar -->
+<div class="w3-top">
+ <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
+  <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
+  <a href="/" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i> Home</a>
 
-        <input type = "text" id = "teamname" placeholder = "Team name">
+  
+
+  <a id = "gotoprofile" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i>  Profil</a>
+
+  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i>  Mesaje</a>
+
+ 
+  
+ </div>
+</div>
+
+<!-- Navbar on small screens -->
+<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 1</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 2</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 3</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">My Profile</a>
+</div>
+<!-- Page Container -->
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">    
+  <!-- The Grid -->
+  <div class="w3-row">
+    <!-- Left Column -->
+    <div class="w3-col m3">
+      <!-- Profile -->
+      <div class="w3-card w3-round w3-white">
+        <div class="w3-container">
+         <h4 class="w3-center">My Profile</h4>
+         <div class = "avatar"></div>
+         <hr>
+         <p><blank id="nume"><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> </blank> <u style = "cursor:pointer" id = "logout">(Log out)</u></p>
+
+         <p  id="oras"><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i>  </p>
+         <p  id="data_nastere"> <i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i>  </p>
+        </div>
+      </div>
+      <br>
+      
+      <!-- Accordion -->
+      <div class="w3-card w3-round">
+        <div id="teams" class="w3-white">
+          <button id="team" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> My Teams</button>
+          <div id="teamBox" class="w3-white">
+          </div>
+          </div>
+        </div>     
+
+        <br>
+
+        <div class="w3-col m12">
+          <div class="w3-card w3-round w3-white">
+            <div class="w3-container w3-padding">
+              <h6 class="w3-opacity">Create your team!</h6>
+              <input placeholder = "My team name" type = "text" id = "teamname" contenteditable="true" class="w3-border w3-padding">
+              <br><br><button id = "createTeam" type="button" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Create</button> 
+            </div>
+          </div>
+        </div>
         <br><br>
-        <button id = "createTeam"> Create! </button>
+        </div>
+   
 
-    </fieldset>
+     
+      
+      <!-- Alert Box 
+      <div class="w3-container w3-display-container w3-round w3-theme-l4 w3-border w3-theme-border w3-margin-bottom w3-hide-small">
+        <span onclick="this.parentElement.style.display='none'" class="w3-button w3-theme-l3 w3-display-topright">
+          <i class="fa fa-remove"></i>
+        </span>
+        <p><strong>Hey!</strong></p>
+        <p>People are looking at your profile. Find out who.</p>
+      </div>
+    -->
+    <!-- End Left Column -->
 
-    <h2>Your teams</h2>
-    <div class = "teams">
-        
+    <div class="w3-col m7">
+    
+      <div class="w3-row-padding">
+        <div class="w3-col m12">
+          <div class="w3-card w3-round w3-white">
+            <div class="w3-container w3-padding">
+              <h6 class="w3-opacity">New topic on forum (Working...)</h6>
+              <input placeholder = "Main subject" type = "text" contenteditable="true" class="w3-border w3-padding">
+              <br><br>
+              <textarea style = "width: 100%;" placeholder = "Details" type = "text" contenteditable="true" class="w3-border w3-padding"></textarea>
+              <br><br><button  type="button" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Post</button> 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+    <div class = "forumPosts">
+      <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+        <h4>Bogdan Macovei</h4>
+        <h5>Something new</h5>
+        <hr class="w3-clear">
+        <p>Hello everybody!</p>
+           
+        <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>   View post</button> 
+      </div>
     </div>
+      
+    <br><br>
+    
+    </div>
+
+    <div id = "tasks" class="w3-col m2">
+
+    </div>
+    
+  <!-- End Grid -->
+
+<!-- End Page Container -->
+</div></div>
+<br>
+
+<!-- Footer -->
+
+<br><br>
+<footer class="w3-container w3-theme-d5">
+  <p>Powered by <a href="/" target="_blank">MDS</a></p>
+</footer>
 
     <script>
 
+
+      // <div class="w3-card w3-round w3-white">
+      //   <div class="w3-container w3-padding">
+      //       <h6 class="w3-opacity">DevTeam1 (8SP)</h6>
+
+      //       Make DIVISION to find if for all x in Data tables we have P(x) verified
+
+      //       <br><br>
+      //       <button  type="button" class="w3-button w3-theme"><i class="fa fa-check"></i>  Done</button> 
+      //   </div>
+      // </div>
+
     var userName = document.cookie.split(' ')[1].split('=')[1];
+
+    $.get('/findUserByUsername/' + userName, function (dataUser) {
+      var arrTeams = dataUser[0].teamDetails.roles;
+
+      for (let i = 0; i < arrTeams.length; ++i) {
+        $.get ('/findActivitiesForCategoryId/' + arrTeams[i].idTeam, function (dataTask) {
+          $.get ('/findTeamById/' + arrTeams[i].idTeam, function (dataTeam) {
+             for (let j = 0; j < dataTask.length; ++j) {
+              if (dataTask[j].isDone == false) {
+                $('#tasks')
+                .append('<h6 class="w3-opacity">' + dataTeam[0].name + ' (' + dataTask[j].storyPoints + ' SP)</h6>')
+                .append(' <a href = "team.html?teamname=' + dataTeam[0].name + '" class="w3-button"><i class="fa fa-eye"></i></button>')
+                .append(dataTask[j].mainSubject)
+                .append('<hr class = "w3-clear">');
+              }
+             }
+          });
+        });
+      }
+    });
+
+    $.get('findUserByUsername/' + userName, function (data) {
+      if (data[0].linkProfilePicture) {
+        $('.avatar').append('<p class="w3-center"><img src="' + data[0].linkProfilePicture + '" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+      }
+      else {
+        $('.avatar').append('<p class="w3-center"><img src="http://clicknathan.com/wp-content/uploads/2013/07/avatar-2.jpg" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+      }
+    });
+
+    $('#gotoprofile').click (function () {
+        window.location = '/profile.html?username=' + userName +'&tab=overview';
+    });
+
     $.get('/findUserByUsername/' + userName, function (dataUser) {
         $('#identificationName').append('<a href = "/profile.html?username=' + userName + '"><b>' + dataUser[0].firstName + '</b></a>');
     });
@@ -142,6 +310,46 @@
                 $('.teams').append ('<a href = "/team.html?teamname=' + dataTeam[0].name + '">' + dataTeam[0].name + '</a>' + '<br>');
             });
         }
+    });
+
+    var currentUsername = document.cookie.split(' ')[1].split('=')[1];
+
+    $.get('/findUserByUsername/' + currentUsername, function (dataUser) {
+        $('#nume').append(dataUser[0].firstName + ' ' + dataUser[0].lastName);
+        
+        if(dataUser[0].city == undefined)
+            $('#oras').append('Update location');
+        else 
+            $('#oras').append(dataUser[0].city);
+
+        if(dataUser[0].birthdate == undefined)  
+            $('#data_nastere').append('Update birthdate');
+        else 
+            $('#data_nastere').append(dataUser[0].birthdate);
+
+
+        var showTeams = true;
+        var nr_echipe = dataUser[0].teamDetails.roles.length;
+        $('#team').on ('click', function () {
+            if (showTeams)
+                $('#teamBox').show();
+            else 
+                $('#teamBox').hide();
+            showTeams = !showTeams;
+
+            $('#teamBox').empty();
+
+            for(let i = 0; i < nr_echipe; i++) {
+                $.get('/findTeamById/' + dataUser[0].teamDetails.roles[i].idTeam, function(dataTeam) {
+                    $('#teamBox')
+                        .append('<a style = "text-decoration: none;" href = "/team.html?name=' + dataTeam[0].name + '"><p style = "padding-left: 15px;"><img style = "width: 20px; heigth: 20px;" src = "http://icons.iconarchive.com/icons/elegantthemes/beautiful-flat-one-color/128/dev-icon.png">&nbsp;' + dataTeam[0].name + '</p></a>');
+                    if (i == nr_echipe - 1) {
+                        $('#teamBox').append('<br>');
+                    }
+                });
+            };
+
+        });
     });
 
     </script>

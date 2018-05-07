@@ -2,330 +2,633 @@
 <html>
 <head>
 	<title>Team page</title>
+    <meta charset="UTF-8">
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.17/angular.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
+</style>
 </head>
-<body>
 
-	<h1>Team <blank id = "test"> </blank></h1>
+<body class="w3-theme-l5">
 
-	<button id = "leave">Leave team</button>
+<!-- Navbar -->
+<div class="w3-top">
+ <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
+  <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
+  <a href="/" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i> Home</a>
 
-	<fieldset>
-		<legend>Add user</legend>
-		<input type = "text" id = "username" placeholder = "Username">
-		<br><br>
-		<button id = "add"> Add user </button>
-	</fieldset>
+  
 
-	<h2>Registered users</h2>
-	<div class = "users">
-	</div>
+  <a id = "gotoprofile" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i>  Profil</a>
 
-	<div class = "pending">
-	</div>
+  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i>  Mesaje</a>
 
-	<script>
-		var teamName = window.location.href.split('?')[1].split('=')[1];
-		$('#test').append (teamName);
-		$.get('/findTeamByName/' + teamName, function (dataTeam) {
+ </div>
+</div>
 
-			var arrUsers = dataTeam[0].users;
-			var currentUser = document.cookie.split(' ')[1].split('=')[1];
+<!-- Navbar on small screens -->
+<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 1</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 2</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 3</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">My Profile</a>
+</div>
+<!-- Page Container -->
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">    
+  <!-- The Grid -->
+  <div class="w3-row">
+    <!-- Left Column -->
+    <div class="w3-col m3">
+      <!-- Profile -->
+      <div class="w3-card w3-round w3-white">
+        <div class="w3-container">
+         <h4 class="w3-center">My Profile</h4>
+         <div class = "avatar">
+          
+        </div>
+         <hr>
+         <p><blank id="nume"><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> </blank> <u style = "cursor:pointer" id = "logout">(Log out)</u></p>
 
-			$.get('/findUserByUsername/' + currentUser, function (dataCurrentUser) {
+         <p  id="oras"><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i>  </p>
+         <p  id="data_nastere"> <i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i>  </p>
+        </div>
+      </div>
+      <br>
+      
+      <!-- Accordion -->
 
-				var id = dataCurrentUser[0]._id;
-				for (let i = 0; i < arrUsers.length; ++i) {
-					if (arrUsers[i].position != 'Pending') {
-						if (id == dataTeam[0].teamLeadId) {
-							$('.users')
-								.append (arrUsers[i].username)
-								.append (' (' + (arrUsers[i].position==undefined?'Team Leader':arrUsers[i].position) + ') ')
-								.append ('<select class = "select" id = ' + arrUsers[i].userId + '> <option value = "Member">Member </option> <option value = "Front-End Developer">Front-End Developer </option> <option value = "Back-End Developer">Back-End Developer </option> <option value = "QA">QA</option> <option value = "BI Specialist">BI Specialist </option> <option value = "Database Specialist">Database Specialist </option> <option value = "Scrum Master">Scrum Master </option> <option value = "Product Owner">Product Owner</option> </select>')
-								.append('<button id = ' + arrUsers[i].userId + ' class = "changeRole">Change Role</button>')
-								.append('<button id = ' + arrUsers[i].userId + ' class = "remove">Remove</button>')
-								.append('<br>');
-						}
-						else {
-							$('.users')
-								.append(arrUsers[i].username)
-								.append (' (' + (arrUsers[i].position==undefined?'Team Leader':arrUsers[i].position) + ') ')
-								.append('<br>');
-						}
-					}
-				}
+        <div class="w3-col m12">
+          <div class="w3-card w3-round w3-white">
+            <div class="w3-container w3-padding">
+              <h6 class="w3-opacity">Add another user</h6>
+              <input placeholder = "Username" type = "text" id = "username" contenteditable="true" class="w3-border w3-padding">
+              <br><br><button id = "add" type="button" class="w3-button w3-theme"><i class="fa fa-plus"></i>  Add</button> <br><div class = "team"></div>
+            </div>
 
-				$('.changeRole').click(function () {
-			 		var id = $(this).attr('id');
-			 		var newPos = $('#' + id).val();
+            <hr>
 
-			 		for(let i = 0; i < arrUsers.length; ++i) {
-			 			if(arrUsers[i].userId == id) {
-			 				arrUsers[i].position = newPos;
-			 			}
-			 		}
+            <div class="w3-container w3-padding">
+                <button id = "leave" type="button" class="w3-button w3-theme"><i class="fa fa-close"></i>  Leave team</button> <br><div class = "team"></div>
+            </div>
 
-			 		var objToMongoTeam = {
-			 			find: {
-			 				_id : dataTeam[0]._id
-			 			},
-			 			replace: {
-			 				users: arrUsers
-			 			}
-			 		};
-			 		$.post ('/updateTeam', objToMongoTeam, function (date) {}, 'json');
 
-			 		$.get ('/findUserById/' + id, function (dataUser) {
-			 			var arr = dataUser[0].teamDetails.roles;
-			 			for(let i = 0; i < arr.length; ++i){
-			 				if(arr[i].idTeam == dataTeam[0]._id) {
-			 					arr[i].position = newPos;
-			 				}
-			 			}
-			 			var objToMongoUser = {
-			 				find: {
-			 					_id: dataUser[0]._id
-			 				},
-			 				replace: {
-			 					teamDetails: {
-			 						roles: arr
-			 					}
-			 				}
-			 			};
-			 			$.post ('/updateUser', objToMongoUser, function (data) {}, 'json');
-			 		});
+          </div>
+        </div>
+      </div>
 
-			 		location.reload();
-				});
+      <!-- Middle column -->
 
-				$('.remove').click(function () {
-					var id = $(this).attr('id');
+    <div class="w3-col m9">
 
-					for(let i = 0; i < arrUsers.length; ++i) {
-						if(arrUsers[i].userId == id) {
-							for(let j = i; j < arrUsers.length; ++j)
-								arrUsers[j] = arrUsers[j + 1];
-							arrUsers.length--;
-						}
-					}
-					var objToMongoTeam = {
-						find: {
-							_id: dataTeam[0]._id
-						},
-						replace: {
-							users: arrUsers
-						}
-					};
-					$.post ('/updateTeam', objToMongoTeam, function (date) {}, 'json');
+      <div class="w3-container w3-card w3-white w3-round w3-margin-left w3-margin-right">
+        <h4> Unfinished Tasks</h4>
+        <hr class="w3-clear">
+        <div class = "unfinishedtasks"></div>
+      </div>
 
-					$.get ('/findUserById/' + id, function (dataUser) {
-			 			var arr = dataUser[0].teamDetails.roles;
-			 			for(let i = 0; i < arr.length; ++i){
-			 				if(arr[i].idTeam == dataTeam[0]._id) {
-			 					for(let j = i; j < arr.length; ++j)
-			 						arr[j] = arr[j + 1];
-			 					arr.length--;
-			 				}
-			 			}
-			 			var objToMongoUser = {
-			 				find: {
-			 					_id: dataUser[0]._id
-			 				},
-			 				replace: {
-			 					teamDetails: {
-			 						roles: arr
-			 					}
-			 				}
-			 			};
-			 			$.post ('/updateUser', objToMongoUser, function (data) {}, 'json');
-			 		});
+      <div class="w3-container w3-card w3-white w3-round w3-margin">
+          <h4 style = "cursor:pointer;" id = "showtaskbody">Add tasks</h4>
+          <div style = "display: none;" class = "taskbody">
+            <hr class="w3-clear">
+            <input type = "text" id = "subject" placeholder = "Task name"> <br><br>
+            <input type = "text" id = "description" placeholder = "Short description"> <br><br>
+            <input type = "number" id = "storypoints" placeholder = "Story points"> <br><br>
 
-			 		alert('User deleted successfully!');
-			 		location.reload();
-				});
-			});
-		});
+            <button id = "addtask" type="button" class="w3-button w3-theme"><i class="fa fa-plus"></i>  Add task</button> <br><br>
+          </div>
+        </div>
 
-		$('#add').click (function () {
-			var usernameLocal = $('#username').val();
+        <div class="w3-container w3-card w3-white w3-round w3-margin">
+          <h4 style = "cursor:pointer;" id = "showdonetasksbody">Done Tasks</h4>
+          <div style = "display: none;" class = "donetasksbody">
+            <hr class="w3-clear">
+            <div class = "donetasks"></div>
+          </div>
+        </div>
 
-			$.get('/findUserByUsername/' + usernameLocal, function (dataUser) {
+        <div class="w3-container w3-card w3-white w3-round w3-margin">
+          <h4 style = "cursor:pointer;" id = "showuserbody">Users</h4>
+          <div style = "display: none;" class = "userbody">
+            <hr class="w3-clear">
+            <div class = "users"></div>
+          </div>
+        </div>
 
-				$.get('/findTeamByName/' + teamName, function (dataTeam) {
+         <div class="w3-container w3-card w3-white w3-round w3-margin">
+          <h4 style = "cursor:pointer;" id = "showpendingbody">Pending users</h4>
+          <div style = "display: none;" class = "pendingbody">
+            <hr class="w3-clear">
+            <div class = "pending"></div>
+          </div>
+        </div>
 
-					var arrUsers = dataTeam[0].users;
-					arrUsers.push({
-						userId: dataUser[0]._id,
-						username: usernameLocal,
-						position: 'Member'
-					});
-					var objToMongoTeam = {
-						find: {
-							_id: dataTeam[0]._id
-						},
-						replace: {
-							users: arrUsers
-						}
-					};
-					$.post ('/updateTeam', objToMongoTeam, function (date) {}, 'json');
+    <br><br>
+    
+    </div>
+    
+  <!-- End Grid -->
 
-					var teamInfo = dataUser[0].teamDetails.roles;
-					teamInfo.push({
-						idTeam: dataTeam[0]._id,
-						position: 'Member'
-					});
-					var objToMongoUser = {
-						find: {
-							_id: dataUser[0]._id
-						},
-						replace: {
-							teamDetails: {
-								roles: teamInfo
-							}
-						}
-					};
-					$.post ('/updateUser', objToMongoUser, function (data) {}, 'json');
-					alert ('User added successfully');
-					window.location.href = '/team.html?teamname=' + teamName;
-				});
-			});
-				
-		});
+<!-- End Page Container -->
+</div></div>
+<br>
 
-		$.get('/findTeamByName/' + teamName, function (dataTeam) {
-			var currentUser = document.cookie.split(' ')[1].split('=')[1];
-			$.get('/findUserByUsername/' + currentUser, function (dataUser) {
-				if(dataTeam[0].teamLeadId === dataUser[0]._id) {
-					$('.pending').append('<h2>Pending users</h2>');
-					for(let i = 0; i < dataTeam[0].users.length; i++) {
-						if(dataTeam[0].users[i].position === 'Pending') {
-							$('.pending')
-								.append(dataTeam[0].users[i].username)
-								.append('<button class = "accept" id = "' + dataTeam[0].users[i].userId + '">Yes</button>')
-								.append('<button class = "decline" id = "' + dataTeam[0].users[i].userId +'">No</button><br>');
-						}
-					}
-					$('.accept').click (function () {
-						var arrLocal = dataTeam[0].users;
-						for(let i = 0; i < arrLocal.length; ++i) {
-							if(arrLocal[i].userId === $(this).attr('id')) {
-								arrLocal[i].position = 'Member';
-								break;
-							}
-						}
-						var objToMongoTeam = {
-							find:{
-								_id: dataTeam[0]._id
-							},
-							replace:{
-								users: arrLocal
-							}
-						};
-						$.post('/updateTeam', objToMongoTeam, function (data) {}, 'json');
-						var userLocalId = $(this).attr('id');
-						$.get('/findUserById/' + userLocalId, function (dataUserTemp) {
-							var arrUserTemp = dataUserTemp[0].teamDetails.roles;
-							arrUserTemp.push({
-								idTeam: dataTeam[0]._id,
-								position: 'Member'
-							});
-							var objToMongoUser = {
-								find: {
-									_id: userLocalId
-								},
-								replace: {
-									teamDetails: {
-										roles: arrUserTemp
-									}
-								}
-							};
-							alert (JSON.stringify(objToMongoUser));
-							$.post('/updateUser', objToMongoUser, function (data) {}, 'json');
-							alert('User accepted');
-							window.location.href = '/team.html?teamname=' + dataTeam[0].name;
-						});
-					});
-					$('.decline').click (function () {
-						var uid = $(this).attr('id');
-						var arrTeamTemp = dataTeam[0].users;
-						for(let i = 0; i < arrTeamTemp.length; ++i){
-							if(arrTeamTemp[i].userId === uid) {
-								for(j = i; j < arrTeamTemp[i].length - 1; ++j) {
-									arrTeamTemp[j] = arrTeamTemp[j + 1];
-								}
-								break;
-							}
-						}
-						arrTeamTemp.length --;
-						var objToMongoTeam = {
-							find: {
-								_id: dataTeam[0]._id
-							},
-							replace:{
-								users: arrTeamTemp
-							}
-						};
-						$.post('/updateTeam', objToMongoTeam, function (date) {}, 'json');
-						alert('User declined');
-						window.location.href = '/team.html?teamname=' + dataTeam[0].name;
-					});
-				}
-			});
-		});
 
-		$('#leave').click (function () {
-			$.get('/findTeamByName/' + teamName, function (dataTeam) {
-				var arrUsers = dataTeam[0].users;
-				var currentUser = document.cookie.split(' ')[1].split('=')[1];
-				$.get('/findUserByUsername/' + currentUser, function (dataCurrentUser) {
-					var id = dataCurrentUser[0]._id;
+<!-- Footer -->
 
-					for(let i = 0; i < arrUsers.length; ++i) {
-						if(arrUsers[i].userId == id) {
-							for(let j = i; j < arrUsers.length; ++j)
-								arrUsers[j] = arrUsers[j + 1];
-							arrUsers.length--;
-						}
-					}
-					var objToMongoTeam = {
-						find: {
-							_id: dataTeam[0]._id
-						},
-						replace: {
-							users: arrUsers
-						}
-					};
-					$.post ('/updateTeam', objToMongoTeam, function (date) {}, 'json');
+<br><br>
+<footer class="w3-container w3-theme-d5">
+  <p>Powered by <a href="/" target="_blank">MDS</a></p>
+</footer>
 
-		 			var arr = dataCurrentUser[0].teamDetails.roles;
-		 			console.log(arr);
-		 			for(let i = 0; i < arr.length; ++i){
-		 				if(arr[i].idTeam == dataTeam[0]._id) {
-		 					console.log('am gasit');
-		 					for(let j = i; j < arr.length - 1; ++j)
-		 						arr[j] = arr[j + 1];
-		 					arr.length--;
-		 					if (arr.length == 0)
-		 						arr = [];
-		 				}
-		 			}
-		 			console.log(arr);
-		 			var objToMongoUser = {
-		 				find: {
-		 					_id: dataCurrentUser[0]._id
-		 				},
-		 				replace: {
-		 					teamDetails: {
-		 						roles: arr
-		 					}
-		 				}
-		 			};
-		 			$.post ('/updateUser', objToMongoUser, function (data) {}, 'json');
-		 			alert('Team left successfully!');
-		 			//window.location.href = '/';
-				});
-			});
-		});
-	</script>
+    <script>
+
+    $.get('/findTeamByName/' + window.location.href.split('?')[1].split('=')[1], function (dataTeam) {
+      $.get('/findActivitiesForCategoryId/' + dataTeam[0]._id, function (dataTask) {
+        for (let i = 0; i < dataTask.length; ++i) {
+          if (dataTask[i].isDone == false) {
+            $('.unfinishedtasks')
+              .append ('<button style = "width: 50px;" class = "donetask" id = "' + dataTask[i]._id + '"><i class = "fa fa-check"></i></button> ')
+              .append ('<button style = "width: 50px;" class = "deletetask" id = "' + dataTask[i]._id + '"><i class = "fa fa-close"></i></button> ')
+              .append ('('+ dataTask[i].storyPoints +' sp) <b>' + dataTask[i].mainSubject + '</b>')
+              .append (' - <i>' + dataTask[i].description + '</i>')
+              .append ('<br><br>');
+          }
+
+          else {
+            $('.donetasks')
+              .append ('('+ dataTask[i].storyPoints +' sp) <b>' + dataTask[i].mainSubject + '</b>')
+              .append (' - <i>' + dataTask[i].description + '</i>')
+              .append ('<br><br>');
+          }
+        }
+
+        $('.donetask').click (function () {
+          var idTask = $(this).attr('id');
+
+          var objToMongoActivity = {
+            find: {
+              _id: idTask
+            }, 
+            replace: {
+              isDone: true
+            }
+          };
+
+          $.post ('/updateActivity', objToMongoActivity, function (date) {}, 'json');
+
+          alert ('This task is done!');
+          location.reload();
+        });
+
+        $('.deletetask').click (function () {
+          $.get ('/deleteActivityById/' + $(this).attr('id'), function (data) {});
+          
+          alert ('This task was successful deleted!');
+          location.reload();
+        });
+      });
+    });
+
+    $('#addtask').click (function () {
+      $.get('/findTeamByName/' + window.location.href.split('?')[1].split('=')[1], function (dataTeam) {
+        var objToMongoActivity = {
+          forCategory: 'team',
+          forCategoryId: dataTeam[0]._id,
+          mainSubject: $('#subject').val(),
+          description: $('#description').val(),
+          creationDate: createDate(),
+          storyPoints: $('#storypoints').val(),
+          isDone: false
+        };
+
+        $.post('/createActivity', objToMongoActivity, function (date) {}, 'json');
+      });
+
+        alert ('This task was successful added!');
+        location.reload();
+    });
+
+    var userName = document.cookie.split(' ')[1].split('=')[1];
+
+
+    $.get('/findUserByUsername/' + userName, function (data) {
+      if (data[0].linkProfilePicture) {
+        $('.avatar').append('<p class="w3-center"><img src="' + data[0].linkProfilePicture + '" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+      }
+      else {
+        $('.avatar').append('<p class="w3-center"><img src="http://clicknathan.com/wp-content/uploads/2013/07/avatar-2.jpg" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+      }
+    });
+      
+
+    if (userName === window.location.href.split('?')[1].split('&')[0].split('=')[1].toString()) {
+      $('#edit').show();
+    }
+
+    $('#gotoprofile').click (function () {
+        window.location = '/profile.html?username=' + userName +'&tab=overview';
+    });
+
+    $('#logout').click (function () {
+        function createCookie (name, value, days) {
+            if (days) {
+                var date = new Date();
+                date.setTime (date.getTime() + (days * 24 * 60 * 60 * 1000));
+                var expires = "; expires=" + date.toGMTString();
+            }
+            else 
+                var expires = "";
+            document.cookie = name + "=" + value + expires + "; path=/";
+        }
+
+        function eraseCookie(name) {
+            createCookie (name, "", -1);
+        }
+
+        eraseCookie ('username');
+        eraseCookie ('sesid');
+        location.reload();
+    });
+
+    function createDate() {
+        var d = new Date();
+
+        var year = d.getFullYear();
+
+        var mon = d.getMonth() + 1;
+        if(mon < 10)
+            mon = '0' + mon;
+
+        var day = d.getDate();
+        if(day < 10)
+            day = '0' + day;
+
+        var hr = d.getHours();
+        if(hr < 10)
+            hr = '0' + hr;
+
+        var min = d.getMinutes();
+        if(min < 10)
+            min = '0' + min;
+
+        var sec = d.getSeconds();
+        if(sec < 10)
+            sec = '0' + sec;
+
+        var currentDate = year + '/' + mon + '/' + day + ' ' + hr + ':' + min + ':' + sec;
+
+        return currentDate;
+    }
+
+    $.get('/findUserByUsername/' + userName, function (dataUser) {
+        $('#nume').append(dataUser[0].firstName + ' ' + dataUser[0].lastName);
+        
+        if(dataUser[0].city == undefined)
+            $('#oras').append('Update location');
+        else 
+            $('#oras').append(dataUser[0].city);
+
+        if(dataUser[0].birthdate == undefined)  
+            $('#data_nastere').append('Update birthdate');
+        else 
+            $('#data_nastere').append(dataUser[0].birthdate);
+    });
+
+    var teamName = window.location.href.split('?')[1].split('=')[1];
+    $('#test').append (teamName);
+    $.get('/findTeamByName/' + teamName, function (dataTeam) {
+      var arrUsers = dataTeam[0].users;
+      var currentUser = document.cookie.split(' ')[1].split('=')[1];
+      $.get('/findUserByUsername/' + currentUser, function (dataCurrentUser) {
+        var id = dataCurrentUser[0]._id;
+        for (let i = 0; i < arrUsers.length; ++i) {
+          if (arrUsers[i].position != 'Pending') {
+            if (id == dataTeam[0].teamLeadId) {
+              $('.users')
+                .append ('<b>' + arrUsers[i].username + '</b>')
+                .append (' (<i>' + (arrUsers[i].position==undefined?'Scrum Master':arrUsers[i].position) + '</i>) ')
+                .append ('<select  class = "select" id = ' + arrUsers[i].userId + '> <option value = "Member">Member </option> <option value = "Front-End Developer">Front-End Developer </option> <option value = "Back-End Developer">Back-End Developer </option> <option value = "QA">QA</option> <option value = "BI Specialist">BI Specialist </option> <option value = "Database Specialist">Database Specialist </option> <option value = "Scrum Master">Scrum Master </option> <option value = "Product Owner">Product Owner</option> </select>')
+                .append(' <button id = ' + arrUsers[i].userId + ' class = "changeRole">Change Role</button>')
+                .append('<button id = ' + arrUsers[i].userId + ' class = "remove">Remove</button>')
+                .append('<br><br>');
+            }
+            else {
+              $('.users')
+                .append('<b>' + arrUsers[i].username + '</b>')
+                .append (' (<i>' + (arrUsers[i].position==undefined?'Team Leader':arrUsers[i].position) + '</i>) ')
+                .append('<br><br>');
+            }
+          }
+        }
+        $('.changeRole').click(function () {
+          var id = $(this).attr('id');
+          var newPos = $('#' + id).val();
+          for(let i = 0; i < arrUsers.length; ++i) {
+            if(arrUsers[i].userId == id) {
+              arrUsers[i].position = newPos;
+            }
+          }
+          var objToMongoTeam = {
+            find: {
+              _id : dataTeam[0]._id
+            },
+            replace: {
+              users: arrUsers
+            }
+          };
+          $.post ('/updateTeam', objToMongoTeam, function (date) {}, 'json');
+          $.get ('/findUserById/' + id, function (dataUser) {
+            var arr = dataUser[0].teamDetails.roles;
+            for(let i = 0; i < arr.length; ++i){
+              if(arr[i].idTeam == dataTeam[0]._id) {
+                arr[i].position = newPos;
+              }
+            }
+            var objToMongoUser = {
+              find: {
+                _id: dataUser[0]._id
+              },
+              replace: {
+                teamDetails: {
+                  roles: arr
+                }
+              }
+            };
+            $.post ('/updateUser', objToMongoUser, function (data) {}, 'json');
+          });
+          location.reload();
+        });
+        $('.remove').click(function () {
+          var id = $(this).attr('id');
+          for(let i = 0; i < arrUsers.length; ++i) {
+            if(arrUsers[i].userId == id) {
+              for(let j = i; j < arrUsers.length; ++j)
+                arrUsers[j] = arrUsers[j + 1];
+              arrUsers.length--;
+            }
+          }
+          var objToMongoTeam = {
+            find: {
+              _id: dataTeam[0]._id
+            },
+            replace: {
+              users: arrUsers
+            }
+          };
+          $.post ('/updateTeam', objToMongoTeam, function (date) {}, 'json');
+          $.get ('/findUserById/' + id, function (dataUser) {
+            var arr = dataUser[0].teamDetails.roles;
+            for(let i = 0; i < arr.length; ++i){
+              if(arr[i].idTeam == dataTeam[0]._id) {
+                for(let j = i; j < arr.length - 1; ++j)
+                  arr[j] = arr[j + 1];
+                arr.length--;
+              }
+            }
+            var objToMongoUser = {
+              find: {
+                _id: dataUser[0]._id
+              },
+              replace: {
+                teamDetails: {
+                  roles: arr
+                }
+              }
+            };
+            $.post ('/updateUser', objToMongoUser, function (data) {}, 'json');
+          });
+          alert('User deleted successfully!');
+          location.reload();
+        });
+      });
+    });
+
+    $('#add').click (function () {
+      var usernameLocal = $('#username').val();
+      $.get('/findUserByUsername/' + usernameLocal, function (dataUser) {
+        $.get('/findTeamByName/' + teamName, function (dataTeam) {
+          var arrUsers = dataTeam[0].users;
+          arrUsers.push({
+            userId: dataUser[0]._id,
+            username: usernameLocal,
+            position: 'Member'
+          });
+          var objToMongoTeam = {
+            find: {
+              _id: dataTeam[0]._id
+            },
+            replace: {
+              users: arrUsers
+            }
+          };
+          $.post ('/updateTeam', objToMongoTeam, function (date) {}, 'json');
+          var teamInfo = dataUser[0].teamDetails.roles;
+          teamInfo.push({
+            idTeam: dataTeam[0]._id,
+            position: 'Member'
+          });
+          var objToMongoUser = {
+            find: {
+              _id: dataUser[0]._id
+            },
+            replace: {
+              teamDetails: {
+                roles: teamInfo
+              }
+            }
+          };
+          $.post ('/updateUser', objToMongoUser, function (data) {}, 'json');
+          alert ('User added successfully');
+          window.location.href = '/team.html?teamname=' + teamName;
+        });
+      });
+        
+    });
+    $.get('/findTeamByName/' + teamName, function (dataTeam) {
+      var currentUser = document.cookie.split(' ')[1].split('=')[1];
+      $.get('/findUserByUsername/' + currentUser, function (dataUser) {
+        if(dataTeam[0].teamLeadId === dataUser[0]._id) {
+          for(let i = 0; i < dataTeam[0].users.length; i++) {
+            if(dataTeam[0].users[i].position === 'Pending') {
+              $('.pending')
+                .append('<b>' + dataTeam[0].users[i].username + '</b>')
+                .append(' <button style = "width: 50px;" class = "accept" id = "' + dataTeam[0].users[i].userId + '"><i class = "fa fa-check"></i></button>')
+                .append('<button style = "width: 50px;" class = "decline" id = "' + dataTeam[0].users[i].userId +'"><i class = "fa fa-close"></i></button><br>')
+                .append('<br>');
+            }
+          }
+          $('.accept').click (function () {
+            var arrLocal = dataTeam[0].users;
+            for(let i = 0; i < arrLocal.length; ++i) {
+              if(arrLocal[i].userId === $(this).attr('id')) {
+                arrLocal[i].position = 'Member';
+                break;
+              }
+            }
+            var objToMongoTeam = {
+              find:{
+                _id: dataTeam[0]._id
+              },
+              replace:{
+                users: arrLocal
+              }
+            };
+            $.post('/updateTeam', objToMongoTeam, function (data) {}, 'json');
+            var userLocalId = $(this).attr('id');
+            $.get('/findUserById/' + userLocalId, function (dataUserTemp) {
+              var arrUserTemp = dataUserTemp[0].teamDetails.roles;
+              arrUserTemp.push({
+                idTeam: dataTeam[0]._id,
+                position: 'Member'
+              });
+              var objToMongoUser = {
+                find: {
+                  _id: userLocalId
+                },
+                replace: {
+                  teamDetails: {
+                    roles: arrUserTemp
+                  }
+                }
+              };
+
+              $.post('/updateUser', objToMongoUser, function (data) {}, 'json');
+              alert('User accepted');
+              window.location.href = '/team.html?teamname=' + dataTeam[0].name;
+            });
+          });
+          $('.decline').click (function () {
+            var uid = $(this).attr('id');
+            var arrTeamTemp = dataTeam[0].users;
+            for(let i = 0; i < arrTeamTemp.length; ++i){
+              if(arrTeamTemp[i].userId === uid) {
+                for(j = i; j < arrTeamTemp[i].length - 1; ++j) {
+                  arrTeamTemp[j] = arrTeamTemp[j + 1];
+                }
+                break;
+              }
+            }
+            arrTeamTemp.length --;
+            var objToMongoTeam = {
+              find: {
+                _id: dataTeam[0]._id
+              },
+              replace:{
+                users: arrTeamTemp
+              }
+            };
+            $.post('/updateTeam', objToMongoTeam, function (date) {}, 'json');
+            alert('User declined');
+            window.location.href = '/team.html?teamname=' + dataTeam[0].name;
+          });
+        }
+      });
+    });
+    $('#leave').click (function () {
+      $.get('/findTeamByName/' + teamName, function (dataTeam) {
+        var arrUsers = dataTeam[0].users;
+        var currentUser = document.cookie.split(' ')[1].split('=')[1];
+        $.get('/findUserByUsername/' + currentUser, function (dataCurrentUser) {
+          var id = dataCurrentUser[0]._id;
+          for(let i = 0; i < arrUsers.length; ++i) {
+            if(arrUsers[i].userId == id) {
+              for(let j = i; j < arrUsers.length - 1; ++j)
+                arrUsers[j] = arrUsers[j + 1];
+              arrUsers.length--;
+            }
+          }
+          var objToMongoTeam = {
+            find: {
+              _id: dataTeam[0]._id
+            },
+            replace: {
+              users: arrUsers
+            }
+          };
+          $.post ('/updateTeam', objToMongoTeam, function (date) {}, 'json');
+          var arr = dataCurrentUser[0].teamDetails.roles;
+          console.log(arr);
+          for(let i = 0; i < arr.length; ++i){
+            if(arr[i].idTeam == dataTeam[0]._id) {
+              console.log('am gasit');
+              for(let j = i; j < arr.length - 1; ++j)
+                arr[j] = arr[j + 1];
+              arr.length--;
+              if (arr.length == 0)
+                arr = [];
+            }
+          }
+          console.log(arr);
+          var objToMongoUser = {
+            find: {
+              _id: dataCurrentUser[0]._id
+            },
+            replace: {
+              teamDetails: {
+                roles: arr
+              }
+            }
+          };
+          $.post ('/updateUser', objToMongoUser, function (data) {}, 'json');
+          alert('Team left successfully!');
+          window.location.href = '/';
+        });
+      });
+    });
+
+
+    // menu
+
+    var visibleTaskBody = true;
+    $('#showtaskbody').click (function () {
+      if (visibleTaskBody) {
+        $('.taskbody').show();
+      }
+      else $('.taskbody').hide();
+
+      visibleTaskBody = !visibleTaskBody;
+    });
+
+    var visibleUserBody = true;
+    $('#showuserbody').click (function () {
+      if (visibleTaskBody) {
+        $('.userbody').show();
+      }
+      else $('.userbody').hide();
+
+      visibleTaskBody = !visibleTaskBody;
+    });
+
+    var visiblePendingBody = true;
+    $('#showpendingbody').click (function () {
+      if (visibleTaskBody) {
+        $('.pendingbody').show();
+      }
+      else $('.pendingbody').hide();
+
+      visibleTaskBody = !visibleTaskBody;
+    });
+
+    var visibleDoneTasksBody = true;
+    $('#showdonetasksbody').click (function () {
+      if (visibleTaskBody) {
+        $('.donetasksbody').show();
+      }
+      else $('.donetasksbody').hide();
+
+      visibleTaskBody = !visibleTaskBody;
+    });
+
+    </script>
 </body>
 </html>

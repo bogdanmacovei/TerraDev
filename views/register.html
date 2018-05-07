@@ -1,42 +1,146 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Register Page</title>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+<title>Register</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+
+
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+
+
+html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
+div.logo {
+  	margin-left:40%;
+}
+.container{
+	
+	margin-top:5%;
+
+}
+
+</style>
 </head>
-<body>
-	<h1> Create account </h1>
+<body class="w3-theme-l5">
 
-	<div class="status"></div>
-	<br>
+<!-- Navbar -->
+<div class="w3-top">
+ <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
+  <a href="/register" class="w3-bar-item w3-button w3-hide-small w3-left w3-padding-large w3-hover-white" title="Register">
+  Register	<i class="fa fa-spinner"></i> 
+</a>
+  <a href="/login" class="w3-bar-item w3-button w3-hide-small w3-left w3-padding-large w3-hover-white" title="Register">
+  Log in	<i class="fa fa-user"></i> 
+  </a>
+ </div>
 
-	<fieldset>
-		<input type = "text" id = "firstname" placeholder = "First Name">
-		<br>
-		<input type = "text" id = "lastname" placeholder = "Last Name">
-		<br>
-		<input type = "text" id = "username" placeholder = "User Name">
-		<br>
-		<input type = "email" id = "email" placeholder = "Email address">
-		<br>
-		<input type = "password" id = "password" placeholder = "Password">
-		<br>
-		<input type = "password" id = "passwordverif" placeholder = "Confirme password">
+<br><br>
 
-		<br><br>
-		<button id = "sign_up"> Sign up! </button>
-	</fieldset>
+</div>
+  
+<!--  <div class="logo" > Sigla </div> -->
+
+
+<!-- Navbar on small screens -->
+<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 1</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 2</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 3</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">My Profile </a>
+</div>
+
+<!-- Page Container -->
+
+
+    
+    <!-- Middle Column -->
+    <div class="container">
+  
+    <div class="row">
+      <h4 style="margin-left:40%">Account</h4>
+      <div class="input-group input-group-icon">
+        <input type="text" id = "firstname" placeholder="First Name"/>
+        <div class="input-icon"><i class="fa fa-user"></i></div>
+      </div>
+      <div class="input-group input-group-icon">
+        <input type="text" id = "lastname" placeholder="Last Name"/>
+        <div class="input-icon"><i class="fa fa-user"></i></div>
+      </div>
+
+      <div class="input-group input-group-icon">
+        <input type="email" id = "email" placeholder="Email Adress"/>
+        <div class="input-icon"><i class="fa fa-envelope"></i></div>
+      </div>
+      <div class="input-group input-group-icon">
+        <input type="text" id = "username" placeholder="Username"/>
+        <div class="input-icon"><i class="fa fa-user"></i></div>
+      </div>
+
+      <div class="input-group input-group-icon">
+        <input type="password" id = "password"  placeholder="Password"/>
+        <div class="input-icon"><i class="fa fa-key"></i></div>
+      </div>
+
+      <div class="input-group input-group-icon">
+        <input type="password" id = "passwordverif"  placeholder="Confirme password"/>
+        <div class="input-icon"><i class="fa fa-key"></i></div>
+      </div>
+    </div>
+     
+    <br><br>
+    <div id="textSignUp"></div>
+    <button id = "sign_up" style="margin-left:20%" > <h4>Sign up!</h4>  </button>
+     <button id = "first_page" style="margin-left:10%" > <h4>Go to log in</h4>  </button>
+
+
+</div>
+      
+
+
+
+<br>
+<br><br><br>
+<!-- Footer -->
+
+<footer class="w3-container w3-theme-d5">
+  <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">Terra Dev</a></p>
+</footer>
 
 	<script>
 		$('#sign_up').on ('click', function () {
-			var preparedJSON = {
-				firstname: $('#firstname').val(),
-				lastname: $('#lastname').val(),
-				username: $('#username').val(),
-				password: $('#password').val(),
-				passwordVerif: $('#passwordverif').val(),
-				email: $('#email').val()
-			};
+	if($('#password').val()!=$('#passwordverif').val()){
+      	   $('#textSignUp').empty();
+      	   $('#textSignUp').append('<p id="pWrong" > Nu ati introdus aceeasi parola! </p>');
+      	   $('#password').val() = '';
+      	   $('#passwordverif').val() = '';
+      	   return;
+      }
+      
+      else if($('#firstname').val() == '' || $('#lastname').val() == '' || $('#username').val() == '' || $('#email').val() == '') {
+      	  $('#textSignUp').empty();
+      	  $('#textSignUp').append('<p id="pWrong"> Nu ati introdus toate datele! </p>');
+      	  return;
+      }
+      else {
+      	  $('#textSignUp').empty();
+          $('#textSignUp').append('<p id="pRight">Contul a fost facut! </p>');
+      }
+      var preparedJSON = {
+        firstname: $('#firstname').val(),
+        lastname: $('#lastname').val(),
+        username: $('#username').val(),
+        password: $('#password').val(),
+        passwordVerif: $('#passwordverif').val(),
+        email: $('#email').val()
+      };
 
 			$.post ('/creating', preparedJSON, function (res) {
 				$('.status').html (res);
@@ -51,6 +155,12 @@
 			}, 2000);
 
 		});
+
+
+		$('#first_page').on ('click', function () {
+      	   window.location.href = '/login';
+			});
 	</script>
+	
 </body>
 </html>

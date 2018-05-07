@@ -15,6 +15,7 @@ app.use (cookieParser());
 app.use (bodyParser.json());
 app.use (bodyParser.urlencoded({extended: true}));
 
+
 var server = app.listen (process.env.PORT || 8000, function (err, res) {
 	if (err)
 		throw err;
@@ -23,7 +24,8 @@ var server = app.listen (process.env.PORT || 8000, function (err, res) {
 
 mongoose.Promise = global.Promise;
 
-mongoose.connect('mongodb://localhost:27017/mydb')
+mongoose.connect('mongodb://root:rootpass@ds113200.mlab.com:13200/terradev')
+//mongoose.connect('mongodb://localhost:27017/mydb')
 	.catch (err => {
 		console.log (err);
 	})
@@ -36,6 +38,15 @@ var User = mongoose.model ('UserTerraDev');
 
 require ('./models/teammodel');
 var Team = mongoose.model ('TeamTerraDev');
+
+require ('./models/messagemodel');
+var Message = mongoose.model ('MessageTerraDev');
+
+require ('./models/messagereplymodel');
+var MessageReply = mongoose.model ('MessageReplyTerraDev');
+
+require ('./models/activitymodel');
+var Activity = mongoose.model ('ActivityTerraDev');
 
 var Auth = require ('./modules/auth');
 var auth = new Auth(User);
@@ -57,6 +68,9 @@ messageRest (app, auth, mongoose);
 
 var messageReplyRest = require ('./modules/messagereplyrest');
 messageReplyRest (app, auth, mongoose);
+
+var activityRest = require ('./modules/activityrest');
+activityRest (app, auth, mongoose);
 
 app.use (function (req, res, next) {
 	if (res.status (404)) {

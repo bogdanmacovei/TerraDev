@@ -4,7 +4,7 @@ module.exports = function(app, auth, mongoose) {
 	app.post('/createReminder', function(req, res){
 		var reminderTemp = new Reminder(req.body);
 		reminderTemp.save();
-		req.end();
+		res.end();
 	});
 
 	app.get('/findAllReminders', function(req, res){

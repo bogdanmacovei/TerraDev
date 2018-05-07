@@ -1,181 +1,453 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>Profile</title>
+	<title>Profile page</title>
+    <meta charset="UTF-8">
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.17/angular.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+<link rel="stylesheet" type="text/css" href="style.css">
+
+<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
+</style>
 </head>
-<body>
+<!--
 
-<h1>Profil <blank id = "test"></blank></h1>
+<body ng-app = "index">
+ 	
+    <div ng-controller = "identification"> Welcome, <span id = "identificationName"></span>! </div>
 
-<fieldset id = "searchteam">
-	<legend>Cauta echipa</legend>
-	<input type = "text" id = "fieldSearch" placeholder = "Search Team Name">
-	<button id = "search"> Search </button>
-</fieldset>
+    <br>
 
-<div class = "team">
+	<div ng-controller = "logOut">
+        <button id = "logout" ng-click = "log_out()"> Log out </button>
+    </div>
+
+    <br>
+    <fieldset>
+        <legend>Create Team</legend>
+
+        <input type = "text" id = "teamname" placeholder = "Team name">
+        <br><br>
+        <button id = "createTeam"> Create! </button>
+
+    </fieldset>
+
+    <h2>Your teams</h2>
+    <div class = "teams">
+        
+    </div>
+
+
+
+!-->
+
+<body class="w3-theme-l5">
+
+<!-- Navbar -->
+<div class="w3-top">
+ <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
+  <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
+  <a href="/" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i> Home</a>
+
+  
+
+  <a id = "gotoprofile" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i>  Profil</a>
+
+  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i>  Mesaje</a>
+
+ </div>
 </div>
 
-<div class = "information"></div>
+<!-- Navbar on small screens -->
+<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 1</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 2</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 3</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">My Profile</a>
+</div>
+<!-- Page Container -->
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">    
+  <!-- The Grid -->
+  <div class="w3-row">
+    <!-- Left Column -->
+    <div class="w3-col m3">
+      <!-- Profile -->
+      <div class="w3-card w3-round w3-white">
+        <div class="w3-container">
+         <h4 class="w3-center">My Profile</h4>
+         <div class = "avatar">
+          
+        </div>
+         <hr>
+         <p><blank id="nume"><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> </blank> <u style = "cursor:pointer" id = "logout">(Log out)</u></p>
 
-<script>
-	var userName = window.location.href.split('?')[1].split('&')[0].split('=')[1];
-	$('#test').append(userName);
+         <p  id="oras"><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i>  </p>
+         <p  id="data_nastere"> <i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i>  </p>
+        </div>
+      </div>
+      <br>
+      
+      <!-- Accordion -->
 
-	if (window.location.href.split('?')[1].split('&')[1] == undefined) {
-		window.location.href = '/profile.html?username=' + document.cookie.split(' ')[1].split('=')[1] +'&tab=overview';
-	}
+        <div class="w3-col m12">
+          <div class="w3-card w3-round w3-white">
+            <div class="w3-container w3-padding">
+              <h6 class="w3-opacity">Searching teams</h6>
+              <input placeholder = "Team name" type = "text" id = "fieldSearch" contenteditable="true" class="w3-border w3-padding">
+              <br><br><button id = "search" type="button" class="w3-button w3-theme"><i class="fa fa-search"></i>  Search</button> <br><div class = "team"></div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-	else {
-		var tab = window.location.href.split('?')[1].split('&')[1].split('=')[1].toString();
-	}
+      <!-- Middle column -->
 
-	switch (tab) {
-		case 'overview': 
-			overview();
-			break;
-		case 'edit':
-			edit();
-			break;
-		default:
-			window.location.href = '/profile.html?username=' + document.cookie.split(' ')[1].split('=')[1] +'&tab=overview';
-	}
+    <div class="w3-col m9">
+        <div class="w3-container w3-card w3-white w3-round w3-margin-left w3-margin-right">
+          <h4>General</h4>
+          <hr class="w3-clear">
+          <div class = "informationGeneral"></div>
+          <div class = "editGeneral"></div>
+        </div>
 
-	function edit () {
-		$('#searchteam').hide();
+         <div class="w3-container w3-card w3-white w3-round w3-margin">
+          <h4>Professional</h4>
+          <hr class="w3-clear">
+          
 
-		// get information from db and put it in html input-elements
-		// then save the new information using update
-		// god bless all of you!
+          <div class = "information"></div>
+          <div class = "editProfessional"></div>
+          <button style = "display:none;" type="button" id = "edit" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-edit"></i>   Edit profile</button> 
+        </div>
 
-		// i'm using tha same <<information>> div class as in <<overview>> tab
+    <br><br>
+    
+    </div>
+    
+  <!-- End Grid -->
 
-		// so
+<!-- End Page Container -->
+</div></div>
+<br>
 
-		createInputField = function (label, idField, mongoFieldComparation, mongoFieldValidation) {
-			$('.information').append ('<b>' + label + '</b>: ');
-			if (mongoFieldComparation != undefined) {
-				$('.information')
-					.append ('<input type = "text" id = "' + idField + '" value ="' + mongoFieldValidation +'">');
-			} 
-			else {
-				$('.information')
-					.append ('<input type = "txt" id = "' + idField + '" value = "">');
-			}
-			$('.information').append ('<br>');
-		}
 
-		$.get('/findUserByUsername/' + userName, function (dataUser) {
-			//createInputField ('Actual education', 'proffesional-education-actual', dataUser[0].professional.education, dataUser[0].professional.education.actual);
-			//createInputField ('Last degree', 'proffesional-education-last-degree', dataUser[0].professional.education, dataUser[0].professional.education.lastDegree);
-			createInputField ('First name', 'first-name', dataUser[0].firstName, dataUser[0].firstName);
-		});
-	}
+<!-- Footer -->
 
-	function overview () {
-		$('#search').click (function () {
-			var fieldSearch = $('#fieldSearch').val();
+<br><br>
+<footer class="w3-container w3-theme-d5">
+  <p>Powered by <a href="/" target="_blank">MDS</a></p>
+</footer>
 
-			$.get('/findTeamByName/' + fieldSearch, function (dataTeam) {
-				if(dataTeam[0] === undefined) {
-					$('.team').empty();
-					$('.team').append ('Team does not exist');
-				}
-				else {
-					$.get('/findUserByUsername/' + userName, function(data) {
-						var userIdTemp = data[0]._id;
+    <script>
 
-						var find = false;
-						for (let i = 0; i < dataTeam[0].users.length; i++) {
-							if (dataTeam[0].users[i].userId == userIdTemp) {
-								find = true;
-							}
-						}
+    var userName = document.cookie.split(' ')[1].split('=')[1];
 
-						if (find) {
-							$('.team').empty();
-							$('.team').append('You are already a member');
-						}
-						else {
-							$('.team').empty();
-							$('.team').append('<button id = "apply">Request Acces </button>');
 
-							$('#apply').click (function () {
-								alert ('Activity Module ');
-							});
-						}
-					});
-				}
-			});
-		});
+    $.get('findUserByUsername/' + userName, function (data) {
+      if (data[0].linkProfilePicture) {
+        $('.avatar').append('<p class="w3-center"><img src="' + data[0].linkProfilePicture + '" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+      }
+      else {
+        $('.avatar').append('<p class="w3-center"><img src="http://clicknathan.com/wp-content/uploads/2013/07/avatar-2.jpg" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+      }
+    });
+      
 
-		$.get('/findUserByUsername/' + userName, function(data) {
-			console.log(data[0]);
-			$('.information').append('<p>First name: ' + data[0].firstName + '</p>');
-			$('.information').append('<p>Last name: ' + data[0].lastName + '</p>');
-			$('.information').append('<p>Email address: ' + data[0].email + '</p>');
-			$('.information').append('<p>Birthdate: ' + data[0].brithdate + '</p>');
-			$('.information').append('<p>City: ' + data[0].city + '</p>');
-			$('.information').append('<p>Login nr.: ' + data[0].loginNr + '</p>');
-			$('.information').append('<p>Register date: ' + data[0].authDate + '</p>');
-			$('.information').append('<p>Last login: ' + data[0].lastLogin + '</p>');
-			$('.information').append('<p>First name: ' + data[0].firstName + '</p>');
-			if (data[0].professional.education != undefined) {
-				$('.information').append('<p>Education:</p>');
-				$('.information').append('<p>Actual degree: ' + data[0].professional.education.actual + '</p>');
-				$('.information').append('<p>Last degree: ' + data[0].professional.education.lastDegree + '</p>');
-			}
-			if (data[0].professional.jobHistory.length > 0) {
-				$('.information').append('<p>Job History:</p>');
-				for (let i = 0; i < data[0].professional.jobHistory.length; ++i) {
-					$('.information').append('<p>' + (i + 1) + '. Company: ' + data[0].professional.jobHistory[i].company +'</p>');
-					$('.information').append('<p> Position: ' + data[0].professional.jobHistory[i].position +'</p>');
-					$('.information').append('<p> Start date: ' + data[0].professional.jobHistory[i].startDate +'</p>');
-					$('.information').append('<p> Finish date: ' + data[0].professional.jobHistory[i].finishDate +'</p>');
-				}
-			}
-			if (data[0].professional.hobbies.length > 0) {
-				$('.information').append('<p>Hobbies:</p>');
-				for (let i = 0; i < data[0].professional.hobbies.length; ++i) {
-					$('.information').append('<p>' + (i + 1) + '. Hobby: ' + data[0].professional.hobbies[i].hobby +'</p>');
-					$('.information').append('<p> Description: ' + data[0].professional.hobbies[i].description +'</p>');
-				}
-			}
-			if (data[0].professional.awards.length > 0) {
-				$('.information').append('<p>Awards:</p>');
-				for (let i = 0; i < data[0].professional.awards.length; ++i) {
-					$('.information').append('<p>' + (i + 1) + '. Award: ' + data[0].professional.awards[i].award +'</p>');
-				}
-			}
-			if (data[0].professional.projects.length > 0) {
-				$('.information').append('<p>Projects:</p>');
-				for (let i = 0; i < data[0].professional.projects.length; ++i) {
-					$('.information').append('<p>' + (i + 1) + '. Project: ' + data[0].professional.projects[i].project +'</p>');
-					$('.information').append('<p> Start date: ' + data[0].professional.projects[i].startDate +'</p>');
-					$('.information').append('<p> Finish date: ' + data[0].professional.projects[i].finishDate +'</p>');
-					$('.information').append('<p> Details: ' + data[0].professional.projects[i].details +'</p>');
-				}
-			}
-			if (data[0].professional.skills.length > 0) {
-				$('.information').append('<p>Skills:</p>');
-				for (let i = 0; i < data[0].professional.skills.length; ++i) {
-					$('.information').append('<p>' + (i + 1) + '. Skill: ' + data[0].professional.skills[i].skill +'</p>');
-					$('.information').append('<p> Level: ' + data[0].professional.skills[i].level +'</p>');
-				}
-			}
-			if (data[0].teamDetails.roles.length > 0) {
-				$('.information').append('<p>Team details: ');
-				for (let i = 0; i < data[0].teamDetails.roles.length; ++i) {
-					$('.information').append('<p>' + (i + 1) + '. ID Team: ' + data[0].teamDetails.roles[i].idTeam +'</p>');
-					$('.information').append('<p>Position: ' + data[0].teamDetails.roles[i].position +'</p>');
-				}
-			}
-		});
-	}
-	
+    if (userName === window.location.href.split('?')[1].split('&')[0].split('=')[1].toString()) {
+      $('#edit').show();
+    }
 
-</script>
+    $('#gotoprofile').click (function () {
+        window.location = '/profile.html?username=' + userName +'&tab=overview';
+    });
+
+    $.get('/findUserByUsername/' + userName, function (dataUser) {
+        $('#identificationName').append('<a href = "/profile.html?username=' + userName + '&tab=overview"><b>' + dataUser[0].firstName + '</b></a>');
+    });
+
+    $('#logout').click (function () {
+        function createCookie (name, value, days) {
+            if (days) {
+                var date = new Date();
+                date.setTime (date.getTime() + (days * 24 * 60 * 60 * 1000));
+                var expires = "; expires=" + date.toGMTString();
+            }
+            else 
+                var expires = "";
+            document.cookie = name + "=" + value + expires + "; path=/";
+        }
+
+        function eraseCookie(name) {
+            createCookie (name, "", -1);
+        }
+
+        eraseCookie ('username');
+        eraseCookie ('sesid');
+        location.reload();
+    });
+
+    function createDate() {
+        var d = new Date();
+
+        var year = d.getFullYear();
+
+        var mon = d.getMonth() + 1;
+        if(mon < 10)
+            mon = '0' + mon;
+
+        var day = d.getDate();
+        if(day < 10)
+            day = '0' + day;
+
+        var hr = d.getHours();
+        if(hr < 10)
+            hr = '0' + hr;
+
+        var min = d.getMinutes();
+        if(min < 10)
+            min = '0' + min;
+
+        var sec = d.getSeconds();
+        if(sec < 10)
+            sec = '0' + sec;
+
+        var currentDate = year + '/' + mon + '/' + day + ' ' + hr + ':' + min + ':' + sec;
+
+        return currentDate;
+    }
+
+    $.get('/findUserByUsername/' + userName, function (dataUser) {
+        $('#nume').append(dataUser[0].firstName + ' ' + dataUser[0].lastName);
+        
+        if(dataUser[0].city == undefined)
+            $('#oras').append('Update location');
+        else 
+            $('#oras').append(dataUser[0].city);
+
+        if(dataUser[0].birthdate == undefined)  
+            $('#data_nastere').append('Update birthdate');
+        else 
+            $('#data_nastere').append(dataUser[0].birthdate);
+    });
+
+    if (window.location.href.split('?')[1].split('&')[1] == undefined) {
+    window.location.href = '/profile.html?username=' + document.cookie.split(' ')[1].split('=')[1] +'&tab=overview';
+  }
+
+  else {
+    var tab = window.location.href.split('?')[1].split('&')[1].split('=')[1].toString();
+  }
+
+  $('#edit').click (function () {
+    window.location = '/profile.html?username=' + userName + '&tab=edit';
+  });
+
+  switch (tab) {
+    case 'overview': 
+      overview();
+      break;
+    case 'edit':
+      edit();
+      break;
+    default:
+      window.location.href = '/profile.html?username=' + document.cookie.split(' ')[1].split('=')[1] +'&tab=overview';
+  }
+
+  function edit () {
+    if (userName != window.location.href.split('?')[1].split('&')[0].split('=')[1].toString()) {
+      return;
+    }
+
+    $.get ('/findUserByUsername/' + userName, function (dataUser) {
+      $('.editGeneral')
+        .append('<p><b>Email</b> <input id = "email" type = "text" value = "' + ((dataUser[0].email)?dataUser[0].email:'') + '"></p>')
+        .append('<p><b>Birthdate</b> <input id = "birthdate" type = "text" value = "' + ((dataUser[0].birthdate)?dataUser[0].birthdate:'') + '"></p>')
+        .append('<p><b>City</b> <input id = "city" type = "text" value = "' + ((dataUser[0].city)?dataUser[0].city:'') + '"></p>')
+        .append('<p><b>Profile picture</b> <input id = "profilepicture" type = "text" value = "' + ((dataUser[0].linkProfilePicture)?dataUser[0].linkProfilePicture:'') + '"></p>');
+
+      $('.editProfessional')
+        .append('<p><b>Actual education</b> <input id = "actualeducation" type = "text" value = "' + ((dataUser[0].professional.education)?dataUser[0].professional.education.actual:'') + '"></p>')
+        .append('<p><b>Last degree</b> <input id = "lastdegree" type = "text" value = "' + ((dataUser[0].professional.education)?dataUser[0].professional.education.lastDegree:'') + '"></p>')
+        .append('<p><b>Hobbies</b> <input id = "hobbies" type = "text" value = "' + ((dataUser[0].professional.hobbies.length > 0)?dataUser[0].professional.hobbies[0].hobby:'') + '"></p>')
+        .append('<p><b>Skills</b> <input id = "skills" type = "text" value = "' + ((dataUser[0].professional.skills.length > 0)?dataUser[0].professional.skills[0].skill:'') + '"></p>')
+        .append('<p><b>Projects</b> <input id = "projects" type = "text" value = "' + ((dataUser[0].professional.projects.length > 0)?dataUser[0].professional.projects[0].project:'') + '"></p>')
+    });
+
+    $('#edit').click (function () {
+      var objToMongoUser = {
+        find: {
+          username: userName
+        },
+        replace: {
+          email: $('#email').val(),
+          birthdate: $('#birthdate').val(),
+          city: $('#city').val(),
+          linkProfilePicture: $('#profilepicture').val(),
+          professional: {
+            education: {
+              actual: $('#actualeducation').val(),
+              lastDegree: $('#lastdegree').val()
+            },
+            hobbies: [{
+              hobby: $('#hobbies').val(),
+              description: ''
+            }],
+            skills: [{
+              skill: $('#skills').val(),
+              level: ''
+            }],
+            projects: [{
+              project: $('#projects').val(),
+              startDate: '',
+              finishDate: '',
+              details: ''
+            }]
+          }
+        }
+      };
+
+      $.post('/updateUser', objToMongoUser, function (date) {}, 'json');
+
+      alert ('Update successful!');
+      window.location = '/profile.html?username=' + userName + '&tab=overview';
+
+    });
+
+  }
+
+  function overview () {
+    $.get('/findUserByUsername/' + window.location.href.split('?')[1].split('&')[0].split('=')[1], function(data) {
+      if (data[0].linkProfilePicture) {
+        $('.informationGeneral').append('<p class="w3-center"><img src="' + data[0].linkProfilePicture + '" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+      }
+
+      $('.informationGeneral').append('<p><b>First name:</b> ' + data[0].firstName + '</p>');
+      $('.informationGeneral').append('<p><b>Last name:</b> ' + data[0].lastName + '</p>');
+      $('.informationGeneral').append('<p><b>Email address:</b> ' + data[0].email + '</p>');
+      $('.informationGeneral').append('<p><b>Username:</b> ' + data[0].username + '</p>');
+      if(data[0].birthdate) {
+        $('.informationGeneral').append('<p><b>Birthdate:</b> ' + data[0].birthdate + '</p>');
+      }
+      if (data[0].city) {
+        $('.informationGeneral').append('<p><b>City:</b> ' + data[0].city + '</p>');
+      }
+
+
+      if (data[0].professional.education) {
+        $('.information').append('<p><b>Education:</b></p>');
+        $('.information').append('<p>Actual degree: ' + data[0].professional.education.actual + '</p>');
+        $('.information').append('<p>Last degree: ' + data[0].professional.education.lastDegree + '</p>');
+      }
+
+      if (data[0].professional.jobHistory.length > 0) {
+        $('.information').append('<p><b>Job History:</b></p>');
+        for (let i = 0; i < data[0].professional.jobHistory.length; ++i) {
+          $('.information').append('<p>' + (i + 1) + '. Company: ' + data[0].professional.jobHistory[i].company +'</p>');
+          $('.information').append('<p> Position: ' + data[0].professional.jobHistory[i].position +'</p>');
+          $('.information').append('<p> Start date: ' + data[0].professional.jobHistory[i].startDate +'</p>');
+          $('.information').append('<p> Finish date: ' + data[0].professional.jobHistory[i].finishDate +'</p>');
+        }
+      }
+      if (data[0].professional.hobbies.length > 0) {
+        $('.information').append('<p><b>Hobbies:</b></p>');
+        for (let i = 0; i < data[0].professional.hobbies.length; ++i) {
+          $('.information').append(data[0].professional.hobbies[i].hobby);
+        }
+      }
+      if (data[0].professional.awards.length > 0) {
+        $('.information').append('<p><b>Awards:</b></p>');
+        for (let i = 0; i < data[0].professional.awards.length; ++i) {
+          $('.information').append('<p>' + (i + 1) + '. Award: ' + data[0].professional.awards[i].award +'</p>');
+        }
+      }
+      if (data[0].professional.projects.length > 0) {
+        $('.information').append('<p><b>Projects:</b></p>');
+        for (let i = 0; i < data[0].professional.projects.length; ++i) {
+          $('.information').append(data[0].professional.projects[i].project);
+        }
+      }
+      if (data[0].professional.skills.length > 0) {
+        $('.information').append('<p><b>Skills:</b></p>');
+        for (let i = 0; i < data[0].professional.skills.length; ++i) {
+          $('.information').append(data[0].professional.skills[i].skill);
+        }
+      }
+      if (data[0].teamDetails.roles.length > 0) {
+        $('.information').append('<p><b>Team details:</b></p> ');
+        for (let i = 0; i < data[0].teamDetails.roles.length; ++i) {
+          $.get('/findTeamById/' + data[0].teamDetails.roles[i].idTeam, function (dataTeam) {
+            $('.information').append('<p><i>' + dataTeam[0].name + '</i> (' + data[0].teamDetails.roles[i].position + ')</p>');
+          });
+          
+          
+        }
+      }
+    });
+  }
+
+  $('#search').click (function () {
+      var fieldSearch = $('#fieldSearch').val();
+
+      $.get('/findTeamByName/' + fieldSearch, function (dataTeam) {
+        if(dataTeam[0] === undefined) {
+          $('.team').empty();
+          $('.team').append ('Team does not exist');
+        }
+        else {
+          $.get('/findUserByUsername/' + userName, function(data) {
+            var userIdTemp = data[0]._id;
+
+            var find = false;
+            for (let i = 0; i < dataTeam[0].users.length; i++) {
+              if (dataTeam[0].users[i].userId == userIdTemp) {
+                find = true;
+              }
+            }
+
+            if (find) {
+              $('.team').empty();
+              $('.team').append('You are already a member');
+            }
+            else {
+              $('.team').empty();
+              $('.team').append('<br><button class="w3-button w3-theme-d2 w3-margin-bottom" id = "apply">Request Acces</button>');
+
+              $('#apply').click (function () {
+                var arrTemp =  dataTeam[0].users;
+                arrTemp.push({
+                userId: data[0]._id,
+                username: data[0].username,
+                position: 'Pending'
+              });
+              var objToMongoTeam = {
+                find: {
+                  _id: dataTeam[0]._id
+                },
+                replace: {
+                  users: arrTemp
+                }
+              };
+ 
+              $.post('/updateTeam', objToMongoTeam, function (date) {}, 'json');
+ 
+              alert ('Your request has been sent');
+              window.location.href = '/profile.html?username=' + data[0].username;
+              });
+            }
+          });
+        }
+      });
+    });
+
+    </script>
 
 </body>
 </html>

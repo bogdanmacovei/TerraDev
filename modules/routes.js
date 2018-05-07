@@ -18,4 +18,12 @@ module.exports = function (app, auth, dirname) {
 	app.get('/profile.html', auth.isAuth, function (req, res) {
 		res.sendFile (dirname + '/views/profile.html');
 	});
+
+	app.get('/style.css', function (req, res) {
+		res.sendFile (dirname + '/views/style.css');
+	});
+
+	app.get('/stil.css', auth.isAuth, function (req, res) {
+		res.sendFile (dirname + '/views/stil.css');
+	});
 }
