@@ -139,7 +139,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
 
           <div class="w3-container w3-padding">
             <h6 class="w3-opacity">New topic</h6>
-            <input id = "subject" placeholder = "Main subject" type = "text" contenteditable="true" class="w3-border w3-padding">
+            <input id = "messagesubject" placeholder = "Main subject" type = "text" contenteditable="true" class="w3-border w3-padding">
             <br><br>
             <textarea id = "message" style = "width: 100%;" placeholder = "Details" type = "text" contenteditable="true" class="w3-border w3-padding"></textarea>
             <br><br><button  id = "postTopic" type="button" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Post</button> 
@@ -658,7 +658,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
                   userId: data[0]._id,
                   forCategory: 'team',
                   forCategoryId: dataTeam[0]._id,
-                  subject: $('#subject').val(),
+                  subject: $('#messagesubject').val(),
                   message: $('#message').val()
               };
 
