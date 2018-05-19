@@ -27,6 +27,16 @@ module.exports = function (app, auth, mongoose) {
 			});
 	});
 
+	app.get('/findReplyMessageByIdMessage/:idReplyMessage', function (req, res) {
+		MessageReply.find({idMessage: req.params.idReplyMessage})
+			.catch (err => {
+				console.log (err);
+			})
+			.then (result => {
+				res.send (result);
+			});
+	});
+
 	app.get ('/findReplyMessageByUserId/:userId', function (req, res) {
 		MessageReply.find({userId: req.params.userId})
 			.catch (err => {

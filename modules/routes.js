@@ -19,6 +19,14 @@ module.exports = function (app, auth, dirname) {
 		res.sendFile (dirname + '/views/profile.html');
 	});
 
+	app.get('/post.html', auth.isAuth, function (req, res) {
+		res.sendFile (dirname + '/views/post.html');
+	});
+
+	app.get('/messages.html', auth.isAuth, function (req, res) {
+		res.sendFile (dirname + '/views/messages.html');
+	});
+
 	app.get('/style.css', function (req, res) {
 		res.sendFile (dirname + '/views/style.css');
 	});
