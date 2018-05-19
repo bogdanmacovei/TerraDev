@@ -18,8 +18,7 @@
 		html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
 	</style>
 </head>
-<body>
-	<div class = "userList">
+	<!-- <div class = "userList">
 		<h3>Lista useri:</h3>
 	</div>
 	<br><br>
@@ -27,12 +26,183 @@
 
 	</div>
 	<input type = "text" id = "fieldMessage" placeholder="Message...">
-	<button id = "send">Send</button>
+	<button id = "send">Send</button> -->
+
+<body class="w3-theme-l5">
+
+<!-- Navbar -->
+<div class="w3-top">
+ <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
+  <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
+  <a href="/" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i> Home</a>
+
+  
+
+  <a id = "gotoprofile" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i>  Profile</a>
+
+  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i>  Messages</a>
+
+ </div>
+</div>
+
+<!-- Navbar on small screens -->
+<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 1</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 2</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 3</a>
+  <a href="#" class="w3-bar-item w3-button w3-padding-large">My Profile</a>
+</div>
+<!-- Page Container -->
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">    
+  <!-- The Grid -->
+  <div class="w3-row">
+    <!-- Left Column -->
+    <div class="w3-col m3">
+      <!-- Profile -->
+      <div class="w3-card w3-round w3-white">
+        <div class="w3-container">
+         <h4 class="w3-center">My Profile</h4>
+         <div class = "avatar">
+          
+        </div>
+         <hr>
+         <p><blank id="nume"><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> </blank> <u style = "cursor:pointer" id = "logout">(Log out)</u></p>
+
+         <p  id="oras"><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i>  </p>
+         <p  id="data_nastere"> <i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i>  </p>
+        </div>
+      </div>
+      <br>
+      
+      <!-- Accordion -->
+
+        <div class="w3-col m12">
+          <div class="w3-card w3-round w3-white">
+            <div class="w3-container w3-padding">
+              <h6 class="w3-opacity">List of users</h6>
+              <div class = "userList"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Middle column -->
+
+    <div class="w3-col m9">
+        <div class="w3-container w3-card w3-white w3-round w3-margin-left w3-margin-right">
+          <h4 id = "receiver"></h4>
+          <hr class="w3-clear">
+          <div class = "messages" style = "overflow-y: scroll; height: 320px;"></div>
+			<br>
+			<input style = "width: 90%;" type = "text" id = "fieldMessage" placeholder="Message...">
+			<button style = "float:right; height: 100%; width: auto;"; id = "send"  class="w3-button w3-theme-d2 w3-margin-bottom">Send</button>
+			<br><br>
+		</div>
+    </div>
+    
+  <!-- End Grid -->
+
+<!-- End Page Container -->
+</div></div>
+<br>
 
 
-</body>
+<!-- Footer -->
+
+<br><br>
+<footer class="w3-container w3-theme-d5">
+  <p>Powered by <a href="/" target="_blank">MDS</a></p>
+</footer>
 
  <script>
+ 	setInterval (function() {
+ 		var receiver = window.location.href.split('?')[1].split('=')[1];
+ 		$.get ('/findUserByUsername/' + currentUser, function (dataUser) {
+ 			var id1, id2;
+ 			if (dataUser[0]._id < receiver) {
+ 				id1 = dataUser[0]._id;
+ 				id2 = receiver;
+ 			}
+ 			else {
+ 				id1 = receiver;
+ 				id2 = dataUser[0]._id;
+ 			}
+	 		$.get('/findMessageOneByGroup/' + id1 + id2, function (data) {
+	 			var lastDate = data[data.length - 1].date;
+	 			lastYear = lastDate.split('/')[0];
+	 			lastMonth = lastDate.split('/')[1];
+	 			lastDay = lastDate.split('/')[2];
+	 			lastHour = lastDate.split('/')[3];
+	 			lastMinute = lastDate.split('/')[4];
+	 			lastSecond = lastDate.split('/')[5];
+
+	 			lastDate = new Date(lastYear, lastMonth - 1, lastDay,
+	 				lastHour, lastMinute, lastSecond, 0);
+
+	 			var ncurrentDate = new Date();
+
+	 			var difference = (ncurrentDate.getTime() - lastDate.getTime()) / 1000;
+
+	 			if (difference <= 2) {
+  					$('.messages').empty();
+					for (let i = 0; i < data.length; ++i) {
+						if (data[i].sender === dataUser[0].username) {
+							$('.messages').append ('<div class = "messagea" style = "float: right;" id=' + i + '>' + data[i].message + '</div><br><br>');
+						}
+						else {
+							$('.messages').append ('<div class = "messageb" style = "float: left;" id=' + i + '>' + data[i].message + '</div><br><br>');
+						}
+					}
+					$('.messages').scrollTop(0);
+					$('.messages').scrollTop($('#' + (data.length - 1)).position().top-$('.messages').position().top);
+				}
+			});
+ 		});
+ 	}, 800);
+ 	// import from profile
+
+ 	var userName = document.cookie.split(' ')[1].split('=')[1];
+
+
+    $.get('findUserByUsername/' + userName, function (data) {
+        if (data[0].linkProfilePicture) {
+            $('.avatar').append('<p class="w3-center"><img src="' + data[0].linkProfilePicture + '" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+        }
+        else {
+            $('.avatar').append('<p class="w3-center"><img src="http://clicknathan.com/wp-content/uploads/2013/07/avatar-2.jpg" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+        }
+    });
+      
+
+    if (userName === window.location.href.split('?')[1].split('&')[0].split('=')[1].toString()) {
+        $('#edit').show();
+    }
+
+    $('#gotoprofile').click (function () {
+        window.location = '/profile.html?username=' + userName +'&tab=overview';
+    });
+
+    $.get('/findUserByUsername/' + userName, function (dataUser) {
+        $('#nume').append(dataUser[0].firstName + ' ' + dataUser[0].lastName);
+        
+        if(dataUser[0].city == undefined)
+            $('#oras').append('Update location');
+        else 
+            $('#oras').append(dataUser[0].city);
+
+        if(dataUser[0].birthdate == undefined)  
+            $('#data_nastere').append('Update birthdate');
+        else 
+            $('#data_nastere').append(dataUser[0].birthdate);
+    });
+
+    // end import from profile
+
+    var receiver = window.location.href.split('?')[1].split('=')[1];
+    $.get('/findUserById/' + receiver, function (data) {
+    	$('#receiver').append (data[0].username);
+    });
+
  	var currentUser = document.cookie.split(' ')[1].split('=')[1];
  	$.get('/findAllUsers', function(dataUsers) {
  		for(let i = 0; i < dataUsers.length; i++)
@@ -41,7 +211,6 @@
  					.append('<a href = \'/messages.html?userid=' + dataUsers[i]._id + '\'>' + dataUsers[i].username + '</a> <br>');
  			}
  	});
-
  	function currentDate () {
 		var d = new Date();
 		var year = d.getFullYear();
@@ -75,17 +244,19 @@
 			id1 = receiver;
 			id2 = dataUser[0]._id;
 		}
-
 		$.get('/findMessageOneByGroup/' + id1 + id2, function (data) {
 			for (let i = 0; i < data.length; ++i) {
-				$('.messages').append ('<blank id=' + i + '>' + data[i].sender + ': ' + data[i].message + '</blank><br>');
+				if (data[i].sender === dataUser[0].username) {
+					$('.messages').append ('<div class = "messagea" style = "float: right;" id=' + i + '>' + data[i].message + '</div><br><br>');
+				}
+				else {
+					$('.messages').append ('<div class = "messageb" style = "float: left;" id=' + i + '>' + data[i].message + '</div><br><br>');
+				}
 			}
-
 			$('.messages').scrollTop(0);
 			$('.messages').scrollTop($('#' + (data.length - 1)).position().top-$('.messages').position().top);
 		});
 	});
-
  	$('#send').click(function () {
  		var receiver = window.location.href.split('?')[1].split('=')[1];
  		$.get ('/findUserByUsername/' + currentUser, function (dataUser) {
@@ -104,24 +275,22 @@
  				date: currentDate(),
  				sender: currentUser
  			};
-
  			$.post('/createMessageOne/', objToMongoUser, function (date) {}, 'json');
-
  			$('.messages').empty();
-
  			$.get('/findMessageOneByGroup/' + id1 + id2, function (data) {
 				for (let i = 0; i < data.length; ++i) {
-					$('.messages').append ('<blank id=' + i + '>' + data[i].sender + ': ' + data[i].message + '</blank><br>');
+					if (data[i].sender === dataUser[0].username) {
+						$('.messages').append ('<div class = "messagea" style = "float: right;" id=' + i + '>' + data[i].message + '</div><br><br>');
+					}
+					else {
+						$('.messages').append ('<div class = "messageb" style = "float: left;" id=' + i + '>' + data[i].message + '</div><br><br>');
+					}
 				}
-
 				$('.messages').scrollTop(0);
 				$('.messages').scrollTop($('#' + (data.length - 1)).position().top-$('.messages').position().top);
 			});
-
 			$('#fieldMessage').val('');
  		});
  	});
-
-
  </script>
 </html>
