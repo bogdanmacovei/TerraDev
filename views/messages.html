@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Message</title>
+	<meta charset="UTF-8">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.17/angular.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+	<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<style>
+		html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
+	</style>
+</head>
+<body>
+	<div class = "userList">
+		<h3>Lista useri:</h3>
+	</div>
+	<br><br>
+	<div class = "messages" style = "overflow: scroll; height: 400px;">
+
+	</div>
+	<input type = "text" id = "fieldMessage" placeholder="Message...">
+	<button id = "send">Send</button>
+
+
+</body>
+
+ <script>
+ 	var currentUser = document.cookie.split(' ')[1].split('=')[1];
+ 	$.get('/findAllUsers', function(dataUsers) {
+ 		for(let i = 0; i < dataUsers.length; i++)
+ 			if(dataUsers[i].username != currentUser){
+ 				$('.userList')
+ 					.append('<a href = \'/messages.html?userid=' + dataUsers[i]._id + '\'>' + dataUsers[i].username + '</a> <br>');
+ 			}
+ 	});
+
+ 	function currentDate () {
+		var d = new Date();
+		var year = d.getFullYear();
+		var mon = d.getMonth() + 1;
+		if(mon < 10)
+			mon = '0' + mon;
+		var day = d.getDate();
+		if(day < 10)
+			day = '0' + day;
+		var hr = d.getHours();
+		if(hr < 10)
+			hr = '0' + hr;
+		var min = d.getMinutes();
+		if(min < 10)
+			min = '0' + min;
+		var sec = d.getSeconds();
+		if(sec < 10)
+			sec = '0' + sec;
+		var date = year + '/' + mon + '/' + day + '/' + hr + '/'  + min + '/' + sec;
+		return date;
+	}
+
+	$.get ('/findUserByUsername/' + currentUser, function (dataUser) {
+		var id1, id2;
+		var receiver = window.location.href.split('?')[1].split('=')[1];
+		if (dataUser[0]._id < receiver) {
+			id1 = dataUser[0]._id;
+			id2 = receiver;
+		}
+		else {
+			id1 = receiver;
+			id2 = dataUser[0]._id;
+		}
+
+		$.get('/findMessageOneByGroup/' + id1 + id2, function (data) {
+			for (let i = 0; i < data.length; ++i) {
+				$('.messages').append ('<blank id=' + i + '>' + data[i].sender + ': ' + data[i].message + '</blank><br>');
+			}
+
+			$('.messages').scrollTop(0);
+			$('.messages').scrollTop($('#' + (data.length - 1)).position().top-$('.messages').position().top);
+		});
+	});
+
+ 	$('#send').click(function () {
+ 		var receiver = window.location.href.split('?')[1].split('=')[1];
+ 		$.get ('/findUserByUsername/' + currentUser, function (dataUser) {
+ 			var id1, id2;
+ 			if (dataUser[0]._id < receiver) {
+ 				id1 = dataUser[0]._id;
+ 				id2 = receiver;
+ 			}
+ 			else {
+ 				id1 = receiver;
+ 				id2 = dataUser[0]._id;
+ 			}
+ 			var objToMongoUser = {
+ 				groupId: id1 + id2,
+ 				message: $('#fieldMessage').val(),
+ 				date: currentDate(),
+ 				sender: currentUser
+ 			};
+
+ 			$.post('/createMessageOne/', objToMongoUser, function (date) {}, 'json');
+
+ 			$('.messages').empty();
+
+ 			$.get('/findMessageOneByGroup/' + id1 + id2, function (data) {
+				for (let i = 0; i < data.length; ++i) {
+					$('.messages').append ('<blank id=' + i + '>' + data[i].sender + ': ' + data[i].message + '</blank><br>');
+				}
+
+				$('.messages').scrollTop(0);
+				$('.messages').scrollTop($('#' + (data.length - 1)).position().top-$('.messages').position().top);
+			});
+
+			$('#fieldMessage').val('');
+ 		});
+ 	});
+
+
+ </script>
+</html>
