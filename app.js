@@ -45,6 +45,9 @@ var Message = mongoose.model ('MessageTerraDev');
 require ('./models/messagereplymodel');
 var MessageReply = mongoose.model ('MessageReplyTerraDev');
 
+require ('./models/messageonetoonemodel');
+var MessageOne = mongoose.model('MessageOneTerraDev');
+
 require ('./models/activitymodel');
 var Activity = mongoose.model ('ActivityTerraDev');
 
@@ -71,6 +74,9 @@ messageReplyRest (app, auth, mongoose);
 
 var activityRest = require ('./modules/activityrest');
 activityRest (app, auth, mongoose);
+
+var messageOnerest = require ('./modules/messageonetoonerest');
+messageOnerest (app, auth, mongoose);
 
 app.use (function (req, res, next) {
 	if (res.status (404)) {
