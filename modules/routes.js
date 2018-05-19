@@ -34,4 +34,8 @@ module.exports = function (app, auth, dirname) {
 	app.get('/stil.css', auth.isAuth, function (req, res) {
 		res.sendFile (dirname + '/views/stil.css');
 	});
+
+	app.get('/logo.png', function (req, res) {
+		res.sendFile (dirname + '/views/logo.png');
+	});
 }
