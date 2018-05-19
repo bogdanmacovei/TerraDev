@@ -30,9 +30,9 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
 
   
 
-  <a id = "gotoprofile" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i>  Profile</a>
+  <a id = "gotoprofile" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i>  Profil</a>
 
-  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i>  Messages</a>
+  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i>  Mesaje</a>
 
  
   
@@ -109,11 +109,11 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
         <div class="w3-col m12">
           <div class="w3-card w3-round w3-white">
             <div class="w3-container w3-padding">
-              <h6 class="w3-opacity">New topic on forum (Working...)</h6>
-              <input placeholder = "Main subject" type = "text" contenteditable="true" class="w3-border w3-padding">
+              <h6 class="w3-opacity">New topic on forum</h6>
+              <input id = "subject" placeholder = "Main subject" type = "text" contenteditable="true" class="w3-border w3-padding">
               <br><br>
-              <textarea style = "width: 100%;" placeholder = "Details" type = "text" contenteditable="true" class="w3-border w3-padding"></textarea>
-              <br><br><button  type="button" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Post</button> 
+              <textarea id = "message" style = "width: 100%;" placeholder = "Details" type = "text" contenteditable="true" class="w3-border w3-padding"></textarea>
+              <br><br><button  id = "postTopic" type="button" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Post</button> 
             </div>
           </div>
         </div>
@@ -121,14 +121,14 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
 
       
     <div class = "forumPosts">
-      <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
+      <!-- <div class="w3-container w3-card w3-white w3-round w3-margin"><br>
         <h4>Bogdan Macovei</h4>
         <h5>Something new</h5>
         <hr class="w3-clear">
         <p>Hello everybody!</p>
            
         <button type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>   View post</button> 
-      </div>
+      </div> -->
     </div>
       
     <br><br>
@@ -169,32 +169,32 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
     var userName = document.cookie.split(' ')[1].split('=')[1];
 
     $.get('/findUserByUsername/' + userName, function (dataUser) {
-        var arrTeams = dataUser[0].teamDetails.roles;
+      var arrTeams = dataUser[0].teamDetails.roles;
 
-        for (let i = 0; i < arrTeams.length; ++i) {
-            $.get ('/findActivitiesForCategoryId/' + arrTeams[i].idTeam, function (dataTask) {
-                $.get ('/findTeamById/' + arrTeams[i].idTeam, function (dataTeam) {
-                    for (let j = 0; j < dataTask.length; ++j) {
-                        if (dataTask[j].isDone == false) {
-                            $('#tasks')
-                            .append('<h6 class="w3-opacity">' + dataTeam[0].name + ' (' + dataTask[j].storyPoints + ' SP)</h6>')
-                            .append(' <a href = "team.html?teamname=' + dataTeam[0].name + '" class="w3-button"><i class="fa fa-eye"></i></button>')
-                            .append(dataTask[j].mainSubject)
-                            .append('<hr class = "w3-clear">');
-                        }
-                    }
-                });
-            });
-        }
+      for (let i = 0; i < arrTeams.length; ++i) {
+        $.get ('/findActivitiesForCategoryId/' + arrTeams[i].idTeam, function (dataTask) {
+          $.get ('/findTeamById/' + arrTeams[i].idTeam, function (dataTeam) {
+             for (let j = 0; j < dataTask.length; ++j) {
+              if (dataTask[j].isDone == false) {
+                $('#tasks')
+                .append('<h6 class="w3-opacity">' + dataTeam[0].name + ' (' + dataTask[j].storyPoints + ' SP)</h6>')
+                .append(' <a href = "team.html?teamname=' + dataTeam[0].name + '" class="w3-button"><i class="fa fa-eye"></i></button>')
+                .append(dataTask[j].mainSubject)
+                .append('<hr class = "w3-clear">');
+              }
+             }
+          });
+        });
+      }
     });
 
     $.get('findUserByUsername/' + userName, function (data) {
-        if (data[0].linkProfilePicture) {
-            $('.avatar').append('<p class="w3-center"><img src="' + data[0].linkProfilePicture + '" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
-        }
-        else {
-            $('.avatar').append('<p class="w3-center"><img src="http://clicknathan.com/wp-content/uploads/2013/07/avatar-2.jpg" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
-        }
+      if (data[0].linkProfilePicture) {
+        $('.avatar').append('<p class="w3-center"><img src="' + data[0].linkProfilePicture + '" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+      }
+      else {
+        $('.avatar').append('<p class="w3-center"><img src="http://clicknathan.com/wp-content/uploads/2013/07/avatar-2.jpg" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+      }
     });
 
     $('#gotoprofile').click (function () {
@@ -350,6 +350,33 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
             };
 
         });
+    });
+
+    $('#postTopic').click (function () {
+        $.get('/findUserByUsername/' + document.cookie.split(' ')[1].split('=')[1], function (data) {
+            var objToMongoMessage = {
+                userId: data[0]._id,
+                forCategory: 'all',
+                forCategoryId: 0,
+                subject: $('#subject').val(),
+                message: $('#message').val()
+            };
+
+            $.post ('/createMessage', objToMongoMessage, function (date) {}, 'json');
+
+            window.location.href = '/';
+        });
+    });
+
+    $.get('/findMessageForCategory/all', function (dataMessage) {
+    	for (let i = 0; i < dataMessage.length; ++i) {
+    		$.get('findUserById/' + dataMessage[i].userId, function (dataUser) {
+    			$('.forumPosts')
+    				.append('<div class="w3-container w3-card w3-white w3-round w3-margin"><br><h4>' + dataUser[0].firstName + ' ' + dataUser[0].lastName + '</h4><h5>' + dataMessage[i].subject + '</h5><hr class="w3-clear"><p>' + dataMessage[i].message + '</p><button onclick="window.location.href = \'/post.html?postid=' + dataMessage[i]._id + '\'" type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>   View post</button> </div>');
+
+
+    		});
+    	}
     });
 
     </script>

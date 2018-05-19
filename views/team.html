@@ -29,9 +29,9 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
 
   
 
-  <a id = "gotoprofile" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i>  Profile</a>
+  <a id = "gotoprofile" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i>  Profil</a>
 
-  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i>  Messages</a>
+  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i>  Mesaje</a>
 
  </div>
 </div>
@@ -124,12 +124,31 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
           </div>
         </div>
 
-         <div class="w3-container w3-card w3-white w3-round w3-margin">
+        <div class="w3-container w3-card w3-white w3-round w3-margin">
           <h4 style = "cursor:pointer;" id = "showpendingbody">Pending users</h4>
           <div style = "display: none;" class = "pendingbody">
             <hr class="w3-clear">
             <div class = "pending"></div>
           </div>
+        </div>
+
+        <div class="w3-container w3-card w3-white w3-round w3-margin-left w3-margin-right">
+          <h4>Team forum</h4>
+
+          <hr class="w3-clear" style="margin: 20px 0 0 0;">
+
+          <div class="w3-container w3-padding">
+            <h6 class="w3-opacity">New topic</h6>
+            <input id = "subject" placeholder = "Main subject" type = "text" contenteditable="true" class="w3-border w3-padding">
+            <br><br>
+            <textarea id = "message" style = "width: 100%;" placeholder = "Details" type = "text" contenteditable="true" class="w3-border w3-padding"></textarea>
+            <br><br><button  id = "postTopic" type="button" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Post</button> 
+          </div>
+
+          <div class = "forumPosts">
+            
+          </div>
+
         </div>
 
     <br><br>
@@ -153,66 +172,66 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
     <script>
 
     $.get('/findTeamByName/' + window.location.href.split('?')[1].split('=')[1], function (dataTeam) {
-        $.get('/findActivitiesForCategoryId/' + dataTeam[0]._id, function (dataTask) {
-            for (let i = 0; i < dataTask.length; ++i) {
-                if (dataTask[i].isDone == false) {
-                    $('.unfinishedtasks')
-                        .append ('<button style = "width: 50px;" class = "donetask w3-button w3-theme" id = "' + dataTask[i]._id + '"><i class = "fa fa-check"></i></button> ')
-                        .append ('<button style = "width: 50px;" class = "deletetask w3-button w3-theme" id = "' + dataTask[i]._id + '"><i class = "fa fa-close"></i></button> ')
-                        .append ('('+ dataTask[i].storyPoints +' sp) ' + dataTask[i].mainSubject)
-                        .append (' - <i>' + dataTask[i].description + '</i>')
-                        .append ('<br><br>');
-                    }
+      $.get('/findActivitiesForCategoryId/' + dataTeam[0]._id, function (dataTask) {
+        for (let i = 0; i < dataTask.length; ++i) {
+          if (dataTask[i].isDone == false) {
+            $('.unfinishedtasks')
+              .append ('<button style = "width: 50px;" class = "donetask w3-button w3-theme" id = "' + dataTask[i]._id + '"><i class = "fa fa-check"></i></button> ')
+              .append ('<button style = "width: 50px;" class = "deletetask w3-button w3-theme" id = "' + dataTask[i]._id + '"><i class = "fa fa-close"></i></button> ')
+              .append ('('+ dataTask[i].storyPoints +' sp) ' + dataTask[i].mainSubject)
+              .append (' - <i>' + dataTask[i].description + '</i>')
+              .append ('<br><br>');
+          }
 
-                else {
-                    $('.donetasks')
-                        .append ('('+ dataTask[i].storyPoints +' sp) ' + dataTask[i].mainSubject)
-                        .append (' - <i>' + dataTask[i].description + '</i>')
-                        .append ('<br><br>');
-                }
-            }   
+          else {
+            $('.donetasks')
+              .append ('('+ dataTask[i].storyPoints +' sp) ' + dataTask[i].mainSubject)
+              .append (' - <i>' + dataTask[i].description + '</i>')
+              .append ('<br><br>');
+          }
+        }
 
-            $('.donetask').click (function () {
-                var idTask = $(this).attr('id');
+        $('.donetask').click (function () {
+          var idTask = $(this).attr('id');
 
-                var objToMongoActivity = {
-                    find: {
-                        _id: idTask
-                    }, 
-                    replace: {
-                        isDone: true
-                    }
-                };
+          var objToMongoActivity = {
+            find: {
+              _id: idTask
+            }, 
+            replace: {
+              isDone: true
+            }
+          };
 
-                $.post ('/updateActivity', objToMongoActivity, function (date) {}, 'json');
+          $.post ('/updateActivity', objToMongoActivity, function (date) {}, 'json');
 
-                alert ('This task is done!');
-                location.reload();
-            });
-
-            $('.deletetask').click (function () {
-                $.get ('/deleteActivityById/' + $(this).attr('id'), function (data) {});
-          
-                alert ('This task was successful deleted!');
-                location.reload();
-            });
+          alert ('This task is done!');
+          location.reload();
         });
+
+        $('.deletetask').click (function () {
+          $.get ('/deleteActivityById/' + $(this).attr('id'), function (data) {});
+          
+          alert ('This task was successful deleted!');
+          location.reload();
+        });
+      });
     });
 
     $('#addtask').click (function () {
-        $.get('/findTeamByName/' + window.location.href.split('?')[1].split('=')[1], function (dataTeam) {
-            var objToMongoActivity = {
-                forCategory: 'team',
-                forCategoryId: dataTeam[0]._id,
-                mainSubject: $('#subject').val(),
-                description: $('#description').val(),
-                creationDate: createDate(),
-                storyPoints: $('#storypoints').val(),
-                isDone: false
-            };
+      $.get('/findTeamByName/' + window.location.href.split('?')[1].split('=')[1], function (dataTeam) {
+        var objToMongoActivity = {
+          forCategory: 'team',
+          forCategoryId: dataTeam[0]._id,
+          mainSubject: $('#subject').val(),
+          description: $('#description').val(),
+          creationDate: createDate(),
+          storyPoints: $('#storypoints').val(),
+          isDone: false
+        };
 
-            $.post('/createActivity', objToMongoActivity, function (date) {}, 'json');
-        });
+        $.post('/createActivity', objToMongoActivity, function (date) {}, 'json');
+      });
 
         alert ('This task was successful added!');
         location.reload();
@@ -222,17 +241,17 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
 
 
     $.get('/findUserByUsername/' + userName, function (data) {
-        if (data[0].linkProfilePicture) {
-            $('.avatar').append('<p class="w3-center"><img src="' + data[0].linkProfilePicture + '" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
-        }
-        else {
-            $('.avatar').append('<p class="w3-center"><img src="http://clicknathan.com/wp-content/uploads/2013/07/avatar-2.jpg" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
-        }
+      if (data[0].linkProfilePicture) {
+        $('.avatar').append('<p class="w3-center"><img src="' + data[0].linkProfilePicture + '" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+      }
+      else {
+        $('.avatar').append('<p class="w3-center"><img src="http://clicknathan.com/wp-content/uploads/2013/07/avatar-2.jpg" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+      }
     });
       
 
     if (userName === window.location.href.split('?')[1].split('&')[0].split('=')[1].toString()) {
-        $('#edit').show();
+      $('#edit').show();
     }
 
     $('#gotoprofile').click (function () {
@@ -452,8 +471,8 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
           window.location.href = '/team.html?teamname=' + teamName;
         });
       });
-        
     });
+
     $.get('/findTeamByName/' + teamName, function (dataTeam) {
       var currentUser = document.cookie.split(' ')[1].split('=')[1];
       $.get('/findUserByUsername/' + currentUser, function (dataUser) {
@@ -534,6 +553,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
         }
       });
     });
+
     $('#leave').click (function () {
       $.get('/findTeamByName/' + teamName, function (dataTeam) {
         var arrUsers = dataTeam[0].users;
@@ -627,6 +647,37 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
       else $('.donetasksbody').hide();
 
       visibleTaskBody = !visibleTaskBody;
+    });
+
+    // forum
+
+    $.get('/findTeamByName/' + teamName, function (dataTeam) {
+      $('#postTopic').click (function () {
+          $.get('/findUserByUsername/' + document.cookie.split(' ')[1].split('=')[1], function (data) {
+              var objToMongoMessage = {
+                  userId: data[0]._id,
+                  forCategory: 'team',
+                  forCategoryId: dataTeam[0]._id,
+                  subject: $('#subject').val(),
+                  message: $('#message').val()
+              };
+
+              $.post ('/createMessage', objToMongoMessage, function (date) {}, 'json');
+
+              window.location.href = '/team.html?name=' + teamName;
+          });
+      });
+    });
+
+    $.get('/findTeamByName/' + teamName, function (dataTeam) {
+      $.get('/findMessageForCategoryId/' + dataTeam[0]._id, function (dataMessage) {
+        for (let i = 0; i < dataMessage.length; ++i) {
+          $.get('findUserById/' + dataMessage[i].userId, function (dataUser) {
+            $('.forumPosts')
+              .append('<hr class="w3-clear" style="margin: 20px 0 0 0;"><div class="w3-container w3-card w3-white w3-round w3-margin"><br><h4>' + dataUser[0].firstName + ' ' + dataUser[0].lastName + '</h4><h5>' + dataMessage[i].subject + '</h5><hr class="w3-clear"><p>' + dataMessage[i].message + '</p><button onclick="window.location.href = \'/post.html?postid=' + dataMessage[i]._id + '\'" type="button" class="w3-button w3-theme-d2 w3-margin-bottom"><i class="fa fa-comment"></i>   View post</button> </div>');
+          });
+        }
+      });
     });
 
     </script>

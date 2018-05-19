@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Post</title>
+	<meta charset="UTF-8">
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.17/angular.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+	<div id = "message">
+		
+	</div>
+
+	<div id = "replies">
+		<h2>Replies</h2>
+	</div>
+
+	<div style="border: 1px solid black">
+		<textarea id = "replymessage" style = "width: 100%;" placeholder = "Reply message" type = "text" contenteditable="true"></textarea>
+		<br><br>
+		<button  id = "reply" type="button">Reply</button> 
+	</div>
+
+
+	<script>
+		var messageId = window.location.href.split('?')[1].split('&')[0].split('=')[1].toString();
+
+		$.get('/findMessageById/' + messageId, function(dataMessage) {
+			$.get('/findUserByUsername/' + document.cookie.split(' ')[1].split('=')[1], function (dataCurrentUser) {
+				if (dataCurrentUser[0]._id == dataMessage[0].userId) {
+					$('#message')
+						.append('<button onclick="deleteTopic()" type="button">Delete Topic</button><br><br>');
+				}
+			});
+		});
+
+		deleteTopic = function() {
+			$.get('/findReplyMessageByIdMessage/' + messageId, function(dataReplyMessage) {
+				for(let i = 0; i < dataReplyMessage.length; ++i) {
+					$.get('/deleteReplyMessageById/' + dataReplyMessage[i]._id, function(data) {});
+				}
+			});
+
+			$.get('/deleteMessageById/' + messageId, function(data) {});
+			window.location.href = '/';
+		};
+
+		$.get('/findMessageById/' + messageId, function(dataMessage) {
+			$.get('findUserById/' + dataMessage[0].userId, function (dataUser) {
+				$('#message')
+					.append('<div style=\"border: 1px solid black\"><h4>Author: ' + dataUser[0].firstName + ' ' + dataUser[0].lastName + '</h4><h4>Subject: ' + dataMessage[0].subject + '</h4><p>' + dataMessage[0].message + '</p></div><br><br>');
+			});
+		});
+
+		$.get('/findReplyMessageByIdMessage/' + messageId, function(dataReplyMessage) {
+			for(let i = 0; i < dataReplyMessage.length; ++i) {
+				$.get('findUserById/' + dataReplyMessage[i].userId, function (dataUser) {
+					$.get('/findUserByUsername/' + document.cookie.split(' ')[1].split('=')[1], function (dataCurrentUser) {
+						$('#replies')
+							.append('<div style=\"border: 1px solid black\"><h4>Author: ' + dataUser[0].firstName + ' ' + dataUser[0].lastName + '<p>' + dataReplyMessage[i].message + '</p></div><br><br>');
+					
+						if (dataCurrentUser[0]._id == dataReplyMessage[i].userId) {
+							$('#replies')
+								.append('<button onclick="deleteReply(\'' + dataReplyMessage[i]._id + '\')" type="button">Delete reply</button><br><br>');
+						}
+					});
+				});
+			}
+		});
+
+		deleteReply = function(id) {
+			$.get('/deleteReplyMessageById/' + id, function(data) {});
+			window.location.href = '/post.html?postid=' + messageId;
+		};
+
+		$('#reply').click (function () {
+			$.get('/findUserByUsername/' + document.cookie.split(' ')[1].split('=')[1], function (dataUser) {
+				var objToMongoReplyMessage = {
+					idMessage: messageId,
+					userId: dataUser[0]._id,
+					message: $('#replymessage').val()
+				};
+
+				$.post ('/createReplyMessage', objToMongoReplyMessage, function (date) {}, 'json');
+
+				window.location.href = '/post.html?postid=' + messageId;
+			});
+        });
+	</script>
+</body>
+</html>
