@@ -24,30 +24,18 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
 
 <!-- Navbar -->
 <div class="w3-top">
- <div class="w3-bar w3-theme-d2 w3-left-align w3-large">
-  <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-theme-d2" href="javascript:void(0);" onclick="openNav()"><i class="fa fa-bars"></i></a>
-  <a href="/" class="w3-bar-item w3-button w3-padding-large w3-theme-d4"><i class="fa fa-home w3-margin-right"></i> Home</a>
-
+ <div class="w3-bar w3-theme-d2 w3-large">
   
-
-  <a id = "gotoprofile" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Account Settings"><i class="fa fa-user"></i>  Profil</a>
-
-  <a href="#" class="w3-bar-item w3-button w3-hide-small w3-padding-large w3-hover-white" title="Messages"><i class="fa fa-envelope"></i>  Mesaje</a>
-
- 
-  
+  <div class="logo">
+    <a href="/">
+      <img src="/logo.png" alt="logo_site">
+    </a>
+  </div>
  </div>
 </div>
 
-<!-- Navbar on small screens -->
-<div id="navDemo" class="w3-bar-block w3-theme-d2 w3-hide w3-hide-large w3-hide-medium w3-large">
-  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 1</a>
-  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 2</a>
-  <a href="#" class="w3-bar-item w3-button w3-padding-large">Link 3</a>
-  <a href="#" class="w3-bar-item w3-button w3-padding-large">My Profile</a>
-</div>
 <!-- Page Container -->
-<div class="w3-container w3-content" style="max-width:1400px;margin-top:80px">    
+<div class="w3-container w3-content" style="max-width:1400px;margin-top:90px">    
   <!-- The Grid -->
   <div class="w3-row">
     <!-- Left Column -->
@@ -55,7 +43,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
       <!-- Profile -->
       <div class="w3-card w3-round w3-white">
         <div class="w3-container">
-         <h4 class="w3-center">My Profile</h4>
+         <h4 id = "gotoprofile" style = "cursor: pointer;" class="w3-center">My Profile</h4>
          <div class = "avatar"></div>
          <hr>
          <p><blank id="nume"><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> </blank> <u style = "cursor:pointer" id = "logout">(Log out)</u></p>
@@ -68,26 +56,27 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
       
       <!-- Accordion -->
       <div class="w3-card w3-round">
+        <a style="border-bottom: 1px solid #fff" href="/messages.html" class="w3-button w3-block w3-theme-l1 w3-left-align" title="Messages"><i class="fa fa-envelope fa-fw w3-margin-right"></i>  Messages</a>
         <div id="teams" class="w3-white">
-          <button id="team" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-circle-o-notch fa-fw w3-margin-right"></i> My Teams</button>
+          <button id="team" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i> My Teams</button>
           <div id="teamBox" class="w3-white">
           </div>
-          </div>
-        </div>     
+        </div>
+      </div>     
 
-        <br>
+      <br>
 
-        <div class="w3-col m12">
-          <div class="w3-card w3-round w3-white">
-            <div class="w3-container w3-padding">
-              <h6 class="w3-opacity">Create your team!</h6>
-              <input placeholder = "My team name" type = "text" id = "teamname" contenteditable="true" class="w3-border w3-padding">
-              <br><br><button id = "createTeam" type="button" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Create</button> 
-            </div>
+      <div class="w3-col m12">
+        <div class="w3-card w3-round w3-white">
+          <div class="w3-container w3-padding">
+            <h6 class="w3-opacity">Create your team!</h6>
+            <input placeholder = "My team name" type = "text" id = "teamname" contenteditable="true" class="w3-border w3-padding">
+            <br><br><button id = "createTeam" type="button" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Create</button> 
           </div>
         </div>
-        <br><br>
-        </div>
+      </div>
+      <br><br>
+    </div>
    
 
      
@@ -103,7 +92,7 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
     -->
     <!-- End Left Column -->
 
-    <div class="w3-col m7">
+    <div class="w3-col m9">
     
       <div class="w3-row-padding">
         <div class="w3-col m12">
@@ -327,7 +316,6 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
         else 
             $('#data_nastere').append(dataUser[0].birthdate);
 
-
         var showTeams = true;
         var nr_echipe = dataUser[0].teamDetails.roles.length;
         $('#team').on ('click', function () {
@@ -348,7 +336,6 @@ html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
                     }
                 });
             };
-
         });
     });
 
