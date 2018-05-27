@@ -7,35 +7,267 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"> </script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.17/angular.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+	<link rel="stylesheet" type="text/css" href="style.css">
+
+	<link rel="stylesheet" href="https://www.w3schools.com/lib/w3-theme-blue-grey.css">
+	<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans'>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<style>
+	html,body,h1,h2,h3,h4,h5 {font-family: "Open Sans", sans-serif}
+	</style>
 </head>
 
-<body>
-	<div id = "message">
-		
+<body class="w3-theme-l5">
+
+	<!-- Navbar -->
+	<div class="w3-top">
+	 <div class="w3-bar w3-theme-d2 w3-large">
+	  
+	  <div class="logo">
+	    <a href="/">
+	      <img src="/logo.png" alt="logo_site">
+	    </a>
+	  </div>
+	 </div>
 	</div>
 
-	<div id = "replies">
-		<h2>Replies</h2>
-	</div>
+	<!-- Page Container -->
+	<div class="w3-container w3-content" style="max-width:1400px;margin-top:90px">    
+	  <!-- The Grid -->
+	  <div class="w3-row">
+	    <!-- Left Column -->
+	    <div class="w3-col m3">
+	      <!-- Profile -->
+	      <div class="w3-card w3-round w3-white">
+	        <div class="w3-container">
+	         <h4 id = "gotoprofile" style = "cursor: pointer;" class="w3-center">My Profile</h4>
+	         <div class = "avatar"></div>
+	         <hr>
+	         <p><blank id="nume"><i class="fa fa-pencil fa-fw w3-margin-right w3-text-theme"></i> </blank> <u style = "cursor:pointer" id = "logout">(Log out)</u></p>
 
-	<div style="border: 1px solid black">
-		<textarea id = "replymessage" style = "width: 100%;" placeholder = "Reply message" type = "text" contenteditable="true"></textarea>
-		<br><br>
-		<button  id = "reply" type="button">Reply</button> 
+	         <p  id="oras"><i class="fa fa-home fa-fw w3-margin-right w3-text-theme"></i>  </p>
+	         <p  id="data_nastere"> <i class="fa fa-birthday-cake fa-fw w3-margin-right w3-text-theme"></i>  </p>
+	        </div>
+	      </div>
+	      <br>
+	      
+	      <!-- Accordion -->
+	      <div class="w3-card w3-round">
+	        <a style="border-bottom: 1px solid #fff" href="/messages.html" class="w3-button w3-block w3-theme-l1 w3-left-align" title="Messages"><i class="fa fa-envelope fa-fw w3-margin-right"></i>  Messages</a>
+	        <div id="teams" class="w3-white">
+	          <button id="team" class="w3-button w3-block w3-theme-l1 w3-left-align"><i class="fa fa-users fa-fw w3-margin-right"></i> My Teams</button>
+	          <div id="teamBox" class="w3-white">
+	          </div>
+	        </div>
+	      </div>     
+
+	      <br>
+
+	      <div class="w3-col m12">
+	        <div class="w3-card w3-round w3-white">
+	          <div class="w3-container w3-padding">
+	            <h6 class="w3-opacity">Create your team!</h6>
+	            <input placeholder = "My team name" type = "text" id = "teamname" contenteditable="true" class="w3-border w3-padding">
+	            <br><br><button id = "createTeam" type="button" class="w3-button w3-theme"><i class="fa fa-pencil"></i>  Create</button> 
+	          </div>
+	        </div>
+	      </div>
+	      <br><br>
+	    </div>
+
+		<div class="w3-col m9">
+			<div id = "message" class="w3-container">
+				
+			</div>
+
+			<h2 class="w3-container">Replies</h2>
+
+			<div class="w3-container">
+			<div class="w3-container w3-card w3-white w3-round w3-margin" style="padding: 15px">
+				<textarea id = "replymessage" style = "width: 100%;" placeholder = "Reply message" type = "text" contenteditable="true"></textarea>
+				<br><br>
+				<button class="w3-button w3-theme" id = "reply" type="button">Reply</button> 
+			</div>
+			</div>
+
+			<div id = "replies" class="w3-container">
+				
+			</div>
+		</div>
+	   </div>
 	</div>
 
 
 	<script>
-		var messageId = window.location.href.split('?')[1].split('&')[0].split('=')[1].toString();
+		var userName = document.cookie.split(' ')[1].split('=')[1];
 
-		$.get('/findMessageById/' + messageId, function(dataMessage) {
-			$.get('/findUserByUsername/' + document.cookie.split(' ')[1].split('=')[1], function (dataCurrentUser) {
-				if (dataCurrentUser[0]._id == dataMessage[0].userId) {
-					$('#message')
-						.append('<button onclick="deleteTopic()" type="button">Delete Topic</button><br><br>');
-				}
-			});
+		$.get('/findUserByUsername/' + userName, function (data) {
+		if (data[0].linkProfilePicture) {
+		$('.avatar').append('<p class="w3-center"><img src="' + data[0].linkProfilePicture + '" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+		}
+		else {
+		$('.avatar').append('<p class="w3-center"><img src="http://clicknathan.com/wp-content/uploads/2013/07/avatar-2.jpg" class="w3-circle" style="height:106px;width:106px" alt="Avatar"></p>');
+		}
 		});
+
+		$('#gotoprofile').click (function () {
+		window.location = '/profile.html?username=' + userName +'&tab=overview';
+		});
+
+		$.get('/findUserByUsername/' + userName, function (dataUser) {
+		$('#identificationName').append('<a href = "/profile.html?username=' + userName + '"><b>' + dataUser[0].firstName + '</b></a>');
+		});
+
+		$('#logout').click (function () {
+		function createCookie (name, value, days) {
+		    if (days) {
+		        var date = new Date();
+		        date.setTime (date.getTime() + (days * 24 * 60 * 60 * 1000));
+		        var expires = "; expires=" + date.toGMTString();
+		    }
+		    else 
+		        var expires = "";
+		    document.cookie = name + "=" + value + expires + "; path=/";
+		}
+
+		function eraseCookie(name) {
+		    createCookie (name, "", -1);
+		}
+
+		eraseCookie ('username');
+		eraseCookie ('sesid');
+		location.reload();
+		});
+
+		function createDate() {
+		var d = new Date();
+
+		var year = d.getFullYear();
+
+		var mon = d.getMonth() + 1;
+		if(mon < 10)
+		    mon = '0' + mon;
+
+		var day = d.getDate();
+		if(day < 10)
+		    day = '0' + day;
+
+		var hr = d.getHours();
+		if(hr < 10)
+		    hr = '0' + hr;
+
+		var min = d.getMinutes();
+		if(min < 10)
+		    min = '0' + min;
+
+		var sec = d.getSeconds();
+		if(sec < 10)
+		    sec = '0' + sec;
+
+		var currentDate = year + '/' + mon + '/' + day + ' ' + hr + ':' + min + ':' + sec;
+
+		return currentDate;
+		}
+
+
+		$('#createTeam').click (function () {
+		$.get('/findUserByUsername/' + document.cookie.split(' ')[1].split('=')[1], function (data) {
+		    var objToMongoTeam = {
+		        name: $('#teamname').val(),
+		        teamLeadId: data[0]._id,
+		        registerDate: createDate(),
+		        departmentId: 1,
+		        users: [{
+		            userId: data[0]._id,
+		            username: document.cookie.split(' ')[1].split('=')[1],
+		            position: 'Team Leader'
+		        }]
+		    };
+
+		    $.post ('/createTeam', objToMongoTeam, function (date) {}, 'json');
+
+		    $.get('/findTeamByName/' + $('#teamname').val(), function (dataTeam) {
+		        var newTeamId = dataTeam[0]._id;
+
+		        var arr = data[0].teamDetails.roles;
+		        arr.push({
+		            idTeam: newTeamId,
+		            position: 'Team Leader'
+		        });
+
+		        var objToMongoUser = {
+		            find: {
+		                _id: data[0]._id
+		            },
+		            replace: {
+		                teamDetails: {
+		                    roles: arr
+		                }
+		            }
+		        };
+
+		        $.post ('/updateUser', objToMongoUser, function (date) {}, 'json');
+
+		        alert ('Team successful created');
+		        window.location.href = '/';
+		    });
+
+		});
+
+		});
+
+		$.get('/findUserByUsername/' + document.cookie.split(' ')[1].split('=')[1], function (dataUser) {
+		var arrTeams = dataUser[0].teamDetails.roles;
+		for (let i = 0; i < arrTeams.length; ++i) {
+		    $.get('/findTeamById/' + arrTeams[i].idTeam, function (dataTeam) {
+		        $('.teams').append ('<a href = "/team.html?teamname=' + dataTeam[0].name + '">' + dataTeam[0].name + '</a>' + '<br>');
+		    });
+		}
+		});
+
+		var currentUsername = document.cookie.split(' ')[1].split('=')[1];
+
+	    $.get('/findUserByUsername/' + currentUsername, function (dataUser) {
+	        $('#nume').append(dataUser[0].firstName + ' ' + dataUser[0].lastName);
+	        
+	        if(dataUser[0].city == undefined)
+	            $('#oras').append('Update location');
+	        else 
+	            $('#oras').append(dataUser[0].city);
+
+	        if(dataUser[0].birthdate == undefined)  
+	            $('#data_nastere').append('Update birthdate');
+	        else 
+	            $('#data_nastere').append(dataUser[0].birthdate);
+
+	        var showTeams = true;
+	        var nr_echipe = dataUser[0].teamDetails.roles.length;
+	        $('#team').on ('click', function () {
+	            if (showTeams)
+	                $('#teamBox').show();
+	            else 
+	                $('#teamBox').hide();
+	            showTeams = !showTeams;
+
+	            $('#teamBox').empty();
+
+	            for(let i = 0; i < nr_echipe; i++) {
+	                $.get('/findTeamById/' + dataUser[0].teamDetails.roles[i].idTeam, function(dataTeam) {
+	                    $('#teamBox')
+	                        .append('<a style = "text-decoration: none;" href = "/team.html?name=' + dataTeam[0].name + '"><p style = "padding-left: 15px;"><img style = "width: 20px; heigth: 20px;" src = "http://icons.iconarchive.com/icons/elegantthemes/beautiful-flat-one-color/128/dev-icon.png">&nbsp;' + dataTeam[0].name + '</p></a>');
+	                    if (i == nr_echipe - 1) {
+	                        $('#teamBox').append('<br>');
+	                    }
+	                });
+	            };
+	        });
+	    });
+
+    	// --------------- Pentru mesaje ----------------------
+
+		var messageId = window.location.href.split('?')[1].split('&')[0].split('=')[1].toString();
 
 		deleteTopic = function() {
 			$.get('/findReplyMessageByIdMessage/' + messageId, function(dataReplyMessage) {
@@ -51,24 +283,40 @@
 		$.get('/findMessageById/' + messageId, function(dataMessage) {
 			$.get('findUserById/' + dataMessage[0].userId, function (dataUser) {
 				$('#message')
-					.append('<div style=\"border: 1px solid black\"><h4>Author: ' + dataUser[0].firstName + ' ' + dataUser[0].lastName + '</h4><h4>Subject: ' + dataMessage[0].subject + '</h4><p>' + dataMessage[0].message + '</p></div><br><br>');
+					.append('<div class="w3-container w3-card w3-white w3-round"><br><h4>' + dataUser[0].firstName + ' ' + dataUser[0].lastName + '</h4><h5>' + dataMessage[0].subject + '</h5><hr class="w3-clear"><p>' + dataMessage[0].message + '</p></div>');
+
+				$.get('/findUserByUsername/' + document.cookie.split(' ')[1].split('=')[1], function (dataCurrentUser) {
+					if (dataCurrentUser[0]._id == dataMessage[0].userId) {
+						$('#message')
+							.append('<button class = "w3-button w3-theme" onclick="deleteTopic()" type="button" style="margin-top: 15px;">Delete Topic</button><br><br>');
+					}
+				});
 			});
 		});
 
-		$.get('/findReplyMessageByIdMessage/' + messageId, function(dataReplyMessage) {
-			for(let i = 0; i < dataReplyMessage.length; ++i) {
-				$.get('findUserById/' + dataReplyMessage[i].userId, function (dataUser) {
-					$.get('/findUserByUsername/' + document.cookie.split(' ')[1].split('=')[1], function (dataCurrentUser) {
-						$('#replies')
-							.append('<div style=\"border: 1px solid black\"><h4>Author: ' + dataUser[0].firstName + ' ' + dataUser[0].lastName + '<p>' + dataReplyMessage[i].message + '</p></div><br><br>');
-					
-						if (dataCurrentUser[0]._id == dataReplyMessage[i].userId) {
-							$('#replies')
-								.append('<button onclick="deleteReply(\'' + dataReplyMessage[i]._id + '\')" type="button">Delete reply</button><br><br>');
+		$.get('/findUserByUsername/' + document.cookie.split(' ')[1].split('=')[1], function (dataCurrentUser) {
+			$.get('/findReplyMessageByIdMessage/' + messageId, function(dataReplyMessage) {
+				$.each(dataReplyMessage.reverse(), function (index, value) {
+	        		
+	        		var indexBun = dataReplyMessage.length - index - 1;
+
+	        		$('#replies')
+						.append('<div id="' + indexBun + '" class="w3-container w3-card w3-white w3-round w3-margin"><br></div>');
+	    		});
+
+	    		$.each(dataReplyMessage.reverse(), function (index, value) {
+	    			var indexBun = dataReplyMessage.length - index - 1;
+
+	        		$.get('findUserById/' + value.userId, function (dataUser) {
+	        			$('#' + index)
+	        				.append('<h4>' + dataUser[0].firstName + ' ' + dataUser[0].lastName + '</h4><hr class="w3-clear"><p>' + value.message + '</p>');
+	        			if (dataCurrentUser[0]._id == value.userId) {
+							$('#' + index)
+								.append('<button class = "w3-button w3-theme" onclick="deleteReply(\'' + value._id + '\')" type="button">Delete reply</button><br><br>');
 						}
-					});
-				});
-			}
+	        		});
+	    		});
+			});
 		});
 
 		deleteReply = function(id) {
